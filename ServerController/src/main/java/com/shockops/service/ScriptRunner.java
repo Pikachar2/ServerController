@@ -26,7 +26,8 @@ public class ScriptRunner {
 		
 		//set running directory
 		pb.directory(new File(ConstVars.SCRIPTDIR));
-		
+System.out.println("workingdir: ");
+System.out.println(pb.directory());
 		//start process
 //		Process p = pb.start();
 		try {
