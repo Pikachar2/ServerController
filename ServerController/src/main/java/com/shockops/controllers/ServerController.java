@@ -16,10 +16,10 @@ public class ServerController {
 	@Inject protected ScriptInfo scriptInfo;
 
 	
-	@RequestMapping(value = "/**/running", method = RequestMethod.GET, produces = "application/json")
-	public String isRunning(){
-		String retval = Boolean.valueOf(scriptInfo.isRunning()).toString();
-		
-		return retval;
-	}
+//	@RequestMapping(value = "/**/running", method = RequestMethod.GET, produces = "application/json")
+//	public String isRunning(){
+//		String retval = Boolean.valueOf(scriptInfo.isRunning()).toString();
+//		
+//		return retval;
+//	}
 }
