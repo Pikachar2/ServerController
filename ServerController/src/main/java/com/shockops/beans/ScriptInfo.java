@@ -24,4 +24,4 @@ public class ScriptInfo {
 		this.running = running;
 	}
 	
-}
+} 
