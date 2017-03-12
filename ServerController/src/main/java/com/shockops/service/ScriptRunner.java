@@ -6,8 +6,9 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.shockops.beans.BaseScript;
 import com.shockops.beans.ScriptInfo;
-import com.shockops.common.*;
+import com.shockops.common.ConstVars;
 
 @Named
 public class ScriptRunner {
@@ -15,7 +16,7 @@ public class ScriptRunner {
 	@Inject
 	private ScriptInfo scriptInfo;
 
-	public String startServer() {
+	public String startServer(BaseScript script) {
 		String retval = ConstVars.STARTED;
 
 		if (scriptInfo.isRunning()) {
@@ -28,7 +29,7 @@ public class ScriptRunner {
 		// ProcessBuilder pb = new ProcessBuilder("myshellScript.sh", "myArg1",
 		// "myArg2");
 		// create builder
-		ProcessBuilder pb = new ProcessBuilder(ConstVars.ARKSTARTSCRIPT);
+		ProcessBuilder pb = new ProcessBuilder(script.getStartScript());
 
 		// add env vars
 
@@ -49,7 +50,7 @@ public class ScriptRunner {
 		return retval;
 	}
 
-	public String stopServer() {
+	public String stopServer(BaseScript script) {
 		String retval = ConstVars.STOPPED;
 
 		if (!scriptInfo.isRunning()) {
@@ -59,7 +60,7 @@ public class ScriptRunner {
 		// TODO check if people are in the game
 
 		// create builder
-		ProcessBuilder pb = new ProcessBuilder(ConstVars.ARKSTOPSCRIPT);
+		ProcessBuilder pb = new ProcessBuilder(script.getStopScript());
 
 		// set running directory
 		pb.directory(new File(ConstVars.SCRIPTDIR));
@@ -77,7 +78,7 @@ public class ScriptRunner {
 		return retval;
 	}
 
-	public String updateServer() {
+	public String updateServer(BaseScript script) {
 		String retval = ConstVars.UPDATED;
 
 		if (scriptInfo.isRunning()) {
@@ -88,7 +89,7 @@ public class ScriptRunner {
 		}
 
 		// create builder
-		ProcessBuilder pb = new ProcessBuilder(ConstVars.ARKUPDATESCRIPT);
+		ProcessBuilder pb = new ProcessBuilder(script.getUpdateScript());
 
 		// set running directory
 		pb.directory(new File(ConstVars.SCRIPTDIR));
