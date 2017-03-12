@@ -26,11 +26,11 @@ public class ScriptRunner {
 		
 		//set running directory
 		pb.directory(new File(ConstVars.SCRIPTDIR));
-System.out.println("workingdir: ");
-System.out.println(pb.directory());
+		pb.inheritIO();
+
 		//start process
-//		Process p = pb.start();
 		try {
+			System.out.println("Executing: " + pb.command());
 			scriptInfo.setArkServer(pb.start());
 			scriptInfo.setRunning(true);
 		} catch (IOException e) {
@@ -38,14 +38,14 @@ System.out.println(pb.directory());
 			e.printStackTrace();
 			retval = -1;
 		}
-		
+
 		return retval;
 	}
 	
 	public int stopServer(){
 		int retval = 0;
 
-		if(scriptInfo.getArkServer().isAlive()){
+/*		if(scriptInfo.getArkServer().isAlive()){
 			scriptInfo.getArkServer().destroy();
 			scriptInfo.setRunning(false);
 		}
@@ -59,6 +59,53 @@ System.out.println(pb.directory());
 			retval = 1;	//force stopped
 		}
 		
+*/		
+		//create builder
+		ProcessBuilder pb = new ProcessBuilder(ConstVars.ARKSTOPSCRIPT);
+
+		//add env vars
+		
+		//set running directory
+		pb.directory(new File(ConstVars.SCRIPTDIR));
+		pb.inheritIO();
+		//start process
+		try {
+			System.out.println("Executing: " + pb.command());
+			scriptInfo.setArkServer(pb.start());
+			scriptInfo.setRunning(false);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			retval = -1;
+		}
+
+		return retval;
+	}
+	
+	public int updateServer(){
+		int retval = 0;
+
+//		ProcessBuilder pb = new ProcessBuilder("myshellScript.sh", "myArg1", "myArg2");
+		//create builder
+		ProcessBuilder pb = new ProcessBuilder(ConstVars.ARKUPDATESCRIPT);
+
+		//add env vars
+		
+		//set running directory
+		pb.directory(new File(ConstVars.SCRIPTDIR));
+		pb.inheritIO();
+
+		//start process
+		try {
+			System.out.println("Executing: " + pb.command());
+			scriptInfo.setArkServer(pb.start());
+			scriptInfo.setRunning(true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			retval = -1;
+		}
+
 		return retval;
 	}
 	

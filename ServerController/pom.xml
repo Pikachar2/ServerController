@@ -5,7 +5,7 @@
 
 	<groupId>com.shockops</groupId>
 	<artifactId>servercontroller</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>test</version>
 	<packaging>jar</packaging>
 
 	<name>ServerController</name>
@@ -70,7 +70,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>com.shockops.ServerControllerApplication</mainClass>
+							<mainClass>com.shockops.ServerControllerApplication.java</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

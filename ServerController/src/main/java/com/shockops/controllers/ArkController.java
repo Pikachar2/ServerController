@@ -17,4 +17,25 @@ public class ArkController extends ServerController{
 		return retval;
 	}
 	
+	
+	@RequestMapping(value = "/ark/stop", method = RequestMethod.GET, produces = "application/json")
+	public String stopArkServer(){
+		String retval = "";
+		//TODO call bash script
+		
+		scriptRunner.stopServer();
+		retval = "Success";
+		return retval;
+	}
+	
+	@RequestMapping(value = "/ark/update", method = RequestMethod.GET, produces = "application/json")
+	public String updateArkServer(){
+		String retval = "";
+		//TODO call bash script
+		
+		scriptRunner.updateServer();
+		retval = "Success";
+		return retval;
+	}
+	
 }
