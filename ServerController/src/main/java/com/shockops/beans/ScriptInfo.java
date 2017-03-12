@@ -7,6 +7,15 @@ public class ScriptInfo {
 
 	private boolean running = false;
 	private Process arkServer;
+	private String status = "";
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public Process getArkServer() {
 		return arkServer;

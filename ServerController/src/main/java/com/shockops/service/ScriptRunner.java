@@ -12,101 +12,115 @@ import com.shockops.common.*;
 @Named
 public class ScriptRunner {
 
-	@Inject	private ScriptInfo scriptInfo;
-	
-	
-	public int startServer(){
-		int retval = 0;
+	@Inject
+	private ScriptInfo scriptInfo;
 
-//		ProcessBuilder pb = new ProcessBuilder("myshellScript.sh", "myArg1", "myArg2");
-		//create builder
+	public String startServer() {
+		String retval = ConstVars.STARTED;
+
+		if (scriptInfo.isRunning()) {
+			if (scriptInfo.getStatus().equals(ConstVars.SERVERUPDATING)) {
+				return ConstVars.UPDATING;
+			}
+			return ConstVars.PREVIOUSINSTANCE;
+		}
+
+		// ProcessBuilder pb = new ProcessBuilder("myshellScript.sh", "myArg1",
+		// "myArg2");
+		// create builder
 		ProcessBuilder pb = new ProcessBuilder(ConstVars.ARKSTARTSCRIPT);
 
-		//add env vars
-		
-		//set running directory
+		// add env vars
+
+		// set running directory
 		pb.directory(new File(ConstVars.SCRIPTDIR));
 		pb.inheritIO();
 
-		//start process
+		// start process
 		try {
 			System.out.println("Executing: " + pb.command());
 			scriptInfo.setArkServer(pb.start());
-			scriptInfo.setRunning(true);
+			setStatus(true, ConstVars.SERVERRUNNING);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			retval = -1;
+			retval = ConstVars.FAIL;
 		}
 
 		return retval;
 	}
-	
-	public int stopServer(){
-		int retval = 0;
 
-/*		if(scriptInfo.getArkServer().isAlive()){
-			scriptInfo.getArkServer().destroy();
-			scriptInfo.setRunning(false);
+	public String stopServer() {
+		String retval = ConstVars.STOPPED;
+
+		if (!scriptInfo.isRunning()) {
+			return ConstVars.NOINSTANCE;
 		}
-		else{
-			retval = -1;	// already stopped
-		}
-		
-		if(scriptInfo.getArkServer().exitValue() != 0){
-			scriptInfo.getArkServer().destroyForcibly();
-			scriptInfo.setRunning(false);
-			retval = 1;	//force stopped
-		}
-		
-*/		
-		//create builder
+
+		// TODO check if people are in the game
+
+		// create builder
 		ProcessBuilder pb = new ProcessBuilder(ConstVars.ARKSTOPSCRIPT);
 
-		//add env vars
-		
-		//set running directory
+		// set running directory
 		pb.directory(new File(ConstVars.SCRIPTDIR));
 		pb.inheritIO();
-		//start process
+		// start process
 		try {
 			System.out.println("Executing: " + pb.command());
 			scriptInfo.setArkServer(pb.start());
-			scriptInfo.setRunning(false);
+			setStatus(false, ConstVars.EMPTY);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			retval = -1;
+			retval = ConstVars.FAIL;
 		}
 
 		return retval;
 	}
-	
-	public int updateServer(){
-		int retval = 0;
 
-//		ProcessBuilder pb = new ProcessBuilder("myshellScript.sh", "myArg1", "myArg2");
-		//create builder
+	public String updateServer() {
+		String retval = ConstVars.UPDATED;
+
+		if (scriptInfo.isRunning()) {
+			if (scriptInfo.getStatus().equals(ConstVars.SERVERUPDATING)) {
+				return ConstVars.UPDATING;
+			}
+			return ConstVars.GAMERUNNING;
+		}
+
+		// create builder
 		ProcessBuilder pb = new ProcessBuilder(ConstVars.ARKUPDATESCRIPT);
 
-		//add env vars
-		
-		//set running directory
+		// set running directory
 		pb.directory(new File(ConstVars.SCRIPTDIR));
 		pb.inheritIO();
 
-		//start process
+		// start process
 		try {
 			System.out.println("Executing: " + pb.command());
 			scriptInfo.setArkServer(pb.start());
-			scriptInfo.setRunning(true);
+			setStatus(true, ConstVars.SERVERUPDATING);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			retval = -1;
+			retval = ConstVars.FAIL;
+		}
+
+		try {
+			scriptInfo.getArkServer().waitFor();
+			setStatus(false, ConstVars.EMPTY);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Waiting failed...");
+			
 		}
 
 		return retval;
 	}
-	
+
+	private void setStatus(boolean isRunning, String status) {
+		scriptInfo.setRunning(isRunning);
+		scriptInfo.setStatus(status);
+	}
+
 }
