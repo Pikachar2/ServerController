@@ -17,7 +17,7 @@ public class ScriptRunner {
 	private ScriptInfo scriptInfo;
 
 	public String startServer(BaseScript script) {
-		String retval = ConstVars.STARTED;
+		String retval = ConstVars.STARTING;
 
 		if (scriptInfo.isRunning()) {
 			if (scriptInfo.getStatus().equals(ConstVars.SERVERUPDATING)) {

@@ -19,6 +19,7 @@ public final class ConstVars {
 	
 	//RETURN CODES
 	public static final String STARTED = "STARTED";
+	public static final String STARTING = "STARTING";
 	public static final String STOPPED = "STOPPED";
 	public static final String FAIL = "FAIL";
 	public static final String GAMERUNNING = "GAME-RUNNING";
