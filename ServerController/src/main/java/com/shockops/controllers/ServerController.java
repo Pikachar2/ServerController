@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shockops.beans.ScriptInfo;
+import com.shockops.service.DataTrawler;
 import com.shockops.service.ScriptRunner;
 
 @RestController
 public class ServerController {
 
+	@Inject protected DataTrawler dataTrawler;
 	@Inject protected ScriptRunner scriptRunner;
 	@Inject protected ScriptInfo scriptInfo;
 

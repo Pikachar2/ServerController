@@ -1,205 +1,53 @@
 package com.shockops.beans;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-//import org.json.JSONException;
-//import org.json.JSONObject;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ArkData {
 
-	// private ArkInfo info;
-	// private ArkPlayers players;
-	// private Map<String, String> rules;
-	private Map<String, Object> info;
-	private Map<String, Object> players;
-	private Map<String, Object> rules;
-
-	public ArkData() {
-		// empty?
-	}
-
-	// public ArkData(Map<String, String> info, Map<String, String> players,
-	// Map<String, String> rules) {
-	// super();
-	// this.info = info;
-	// this.players = players;
-	// this.rules = rules;
-	// }
-
-	public ArkData(String input) {
+    @JsonProperty("info")
+	 private ArkInfo info;
+    @JsonProperty("players")
+	 private List<ArkPlayer> players;
+    @JsonProperty("rules")
+	 private ArkRules rules;
+    
+    
+    
+	public ArkData(ArkInfo info, List<ArkPlayer> players, ArkRules rules) {
 		super();
-		JSONObject json = null;
-		String value = null;
-		JSONObject item = null;
-		JSONArray array = null;
-		
-
-		try {
-			json = new JSONObject(input);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Iterator<?> keys = json.keys();
-		while (keys.hasNext()) {
-			String key = (String) keys.next();
-			try {
-				value = json.getString(key);
-				checkValue(key, value, String.class);
-			} catch (JSONException e) {
-				try {
-					item = json.getJSONObject(key);
-					checkValue(key, item, JSONObject.class);
-				} catch (JSONException e1) {
-					try {
-						array = json.getJSONArray(key);
-						//TODO add parse JSONArray
-					} catch (JSONException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-				}
-			}
-			
-//			if (key.contains("info")) {
-//				 this.info = jsonToMap(value);
-//			} else if (key.contains("players")) {
-//				// this.players = jsonToMap(value);
-//			} else if (key.contains("rules")) {
-//				// this.rules = jsonToMap(value);
-//			} else {
-//				// do nothing?
-//			}
-		}
+		this.info = info;
+		this.players = players;
+		this.rules = rules;
 	}
-
-	private <T> void checkValue(String key, Object value, Class<T> type){
-
-		if(type.equals(String.class)){
-			getValueString(key, (String) value);
-		}else if(type.equals(JSONObject.class)){
-			getValueObject(key, (JSONObject) value);
-		}else if(type.equals(JSONArray.class)){
-			getValueArray(key, (JSONArray) value);
-		}
-		
-		
+	public ArkData() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
-	
-	private void getValueArray(String key, JSONArray value){
-		if (key.contains("info")) {
-			 this.info = jsonToMap(value);
-		} else if (key.contains("players")) {
-			 this.players = jsonToMap(value);
-		} else if (key.contains("rules")) {
-			 this.rules = jsonToMap(value);
-		} else {
-			// do nothing?
-		}
+	public ArkInfo getInfo() {
+		return info;
 	}
-	
-	private void getValueObject(String key, JSONObject value){
-		if (key.contains("info")) {
-			 this.info = jsonToMap(value);
-		} else if (key.contains("players")) {
-			 this.players = jsonToMap(value);
-		} else if (key.contains("rules")) {
-			 this.rules = jsonToMap(value);
-		} else {
-			// do nothing?
-		}
+	public void setInfo(ArkInfo info) {
+		this.info = info;
 	}
-	
-	private void getValueString(String key, String value){
-		if (key.contains("info")) {
-			 this.info = jsonToMap(value);
-		} else if (key.contains("players")) {
-			 this.players = jsonToMap(value);
-		} else if (key.contains("rules")) {
-			 this.rules = jsonToMap(value);
-		} else {
-			// do nothing?
-		}
+	public List<ArkPlayer> getPlayers() {
+		return players;
 	}
-	
-	private Map<String, Object> jsonToMap(String input)  {
-		Map<String, Object> map = new HashMap<String, Object>();
-
-		JSONObject json = null;
-				try {
-					json = new JSONObject(input);
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		Iterator<?> keys = json.keys();
-		while (keys.hasNext()) {
-			String key = (String) keys.next();
-			String value = null;
-			try {
-				value = json.getString(key);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			map.put(key, value);
-		}
-
-		return map;
+	public void setPlayers(List<ArkPlayer> players) {
+		this.players = players;
 	}
-
-	private Map<String, Object> jsonToMap(JSONObject json) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		Iterator<?> keys = json.keys();
-		while (keys.hasNext()) {
-			String key = (String) keys.next();
-			String value = null;
-			try {
-				value = json.getString(key);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			map.put(key, value);
-		}
-
-		return map;
+	public ArkRules getRules() {
+		return rules;
 	}
-
-	private Map<String, Object> jsonToMap(JSONArray jsonArray) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-//		jsonArray.
-//		Iterator<?> keys = json.keys();
-//		while (keys.hasNext()) {
-//			String key = (String) keys.next();
-//			String value = null;
-//			try {
-//				value = json.getString(key);
-//			} catch (JSONException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			map.put(key, value);
-//		}
-
-		return map;
+	public void setRules(ArkRules rules) {
+		this.rules = rules;
 	}
-
-	@Override
-	public String toString() {
-		return "ArkData [info=" + info + ", players=" + players + ", rules=" + rules + "]";
-	}
-
-	
-	
+	 
+	 
+	 
 }
