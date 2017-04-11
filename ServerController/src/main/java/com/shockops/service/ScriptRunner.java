@@ -18,7 +18,7 @@ public class ScriptRunner extends Thread{
 	private ScriptInfo scriptInfo;
 	private BaseScript bScript;
 
-	public String startServer(BaseScript script) {
+	public String startServer(BaseScript script, String sessionName) {
 		String retval = ConstVars.STARTING;
 		this.bScript = script;
 		
@@ -35,7 +35,45 @@ public class ScriptRunner extends Thread{
 		// ProcessBuilder pb = new ProcessBuilder("myshellScript.sh", "myArg1",
 		// "myArg2");
 		// create builder
-		ProcessBuilder pb = new ProcessBuilder(script.getStartScript());
+		ProcessBuilder pb = new ProcessBuilder(script.getStartScript(), sessionName);
+
+		// add env vars
+
+		// set running directory
+		pb.directory(new File(ConstVars.SCRIPTDIR));
+		pb.inheritIO();
+
+		// start process
+		try {
+			System.out.println("Executing: " + pb.command());
+			scriptInfo.setArkServer(pb.start());
+			setStatus(true, ConstVars.SERVERRUNNING);
+		} catch (IOException e) {
+			e.printStackTrace();
+			retval = ConstVars.FAIL;
+		}
+
+		return retval;
+	}
+
+	public String createMapAndStartServer(BaseScript script, String sessionName, String mapName) {
+		String retval = ConstVars.STARTING;
+		this.bScript = script;
+		
+		if (scriptInfo.isRunning()) {
+			if (scriptInfo.getStatus().equals(ConstVars.SERVERUPDATING)) {
+				return ConstVars.UPDATING;
+			}
+			else if(new DataTrawler().exchangeAndConvert() == null){
+				return ConstVars.STARTING;
+			}
+			return ConstVars.PREVIOUSINSTANCE;
+		}
+
+		// ProcessBuilder pb = new ProcessBuilder("myshellScript.sh", "myArg1",
+		// "myArg2");
+		// create builder
+		ProcessBuilder pb = new ProcessBuilder(script.getCreateScript(), sessionName, mapName);
 
 		// add env vars
 
@@ -77,11 +115,13 @@ public class ScriptRunner extends Thread{
 			scriptInfo.setArkServer(pb.start());
 			setStatus(false, ConstVars.EMPTY);
 		} catch (IOException e) {
+			System.out.println("something broke");
 			e.printStackTrace();
 			retval = ConstVars.FAIL;
 		}
 
-        this.start();
+		System.out.println("just before returning...");
+//		new StatusThread(script).start();
 		return retval;
 	}
 

@@ -9,6 +9,7 @@ public final class ConstVars {
 	public static final String ARKSTARTSCRIPT = ARKSCRIPTDIR + "/arkStartup.sh";
 	public static final String ARKSTOPSCRIPT = ARKSCRIPTDIR + "/arkStop.sh";
 	public static final String ARKUPDATESCRIPT = ARKSCRIPTDIR + "/arkUpdate.sh";
+	public static final String ARKCREATESCRIPT = ARKSCRIPTDIR + "/arkCreateMap.sh";
 	
 	
 	//SPECIFICS 

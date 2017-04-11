@@ -6,13 +6,15 @@ public class BaseScript {
 	private String stopScript;
 	private String updateScript;
 	private String scriptDirectory;
+	private String createScript;
 
-	public BaseScript(String startScript, String stopScript, String updateScript, String scriptDirectory) {
+	public BaseScript(String startScript, String stopScript, String updateScript, String scriptDirectory, String createScript) {
 		super();
 		this.startScript = startScript;
 		this.stopScript = stopScript;
 		this.updateScript = updateScript;
 		this.scriptDirectory = scriptDirectory;
+		this.createScript = createScript;
 	}
 
 	public String getScriptDirectory() {
@@ -45,6 +47,14 @@ public class BaseScript {
 
 	public void setUpdateScript(String updateScript) {
 		this.updateScript = updateScript;
+	}
+
+	public String getCreateScript() {
+		return createScript;
+	}
+
+	public void setCreateScript(String createScript) {
+		this.createScript = createScript;
 	}
 
 }
