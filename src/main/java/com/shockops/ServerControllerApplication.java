@@ -8,5 +8,8 @@ public class ServerControllerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ServerControllerApplication.class, args);
+		
+		
+		
 	}
 }
