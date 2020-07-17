@@ -28,7 +28,6 @@ public final class ConstVars {
     public static final String NOINSTANCE = "NO-INSTANCE";
 
     // URLs
-    public static final String ARKSERVERAPI = "https://arkservers.net/api/query/";
-    public static final String ARKSERVERIP = "69.143.240.10:27015";
-    public static final String ARKSERVERADDR = ARKSERVERAPI + ARKSERVERIP;
+    public static final String ARKSERVERS_API_QUERY_URL = "https://arkservers.net/api/query/";
+    public static final String THIS_SERVER_PORT = ":27015";
 }

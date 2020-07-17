@@ -65,7 +65,6 @@ public class ArkInfo {
 
     public ArkInfo() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     public ArkInfo(String protocol, String hostName, String map, String modDir, String modDesc, String appID,
