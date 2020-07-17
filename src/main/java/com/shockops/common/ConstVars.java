@@ -29,6 +29,6 @@ public final class ConstVars {
 
     // URLs
     public static final String ARKSERVERAPI = "https://arkservers.net/api/query/";
-    public static final String ARKSERVERIP = "98.169.137.229:27015";
+    public static final String ARKSERVERIP = "69.143.240.10:27015";
     public static final String ARKSERVERADDR = ARKSERVERAPI + ARKSERVERIP;
 }
