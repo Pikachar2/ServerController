@@ -110,8 +110,45 @@ public class ScriptRunner extends Thread {
         // start process
         try {
             System.out.println("Executing: " + pb.command());
-            scriptInfo.setArkServer(pb.start());
-            setStatus(false, ConstVars.EMPTY);
+            Process process = pb.start();
+            scriptInfo.setArkServer(process);
+            if (process.exitValue() == 0) {
+                setStatus(false, ConstVars.EMPTY);
+            }
+        } catch (IOException e) {
+            System.out.println("something broke");
+            e.printStackTrace();
+            retval = ConstVars.FAIL;
+        }
+
+        System.out.println("just before returning...");
+        // new StatusThread(script).start();
+        return retval;
+    }
+
+    public String saveAndExportServer(BaseScript script) {
+        String retval = ConstVars.STOPPED;
+
+        if (!scriptInfo.isRunning()) {
+            return ConstVars.NOINSTANCE;
+        }
+
+        // TODO check if people are in the game
+
+        // create builder
+        ProcessBuilder pb = new ProcessBuilder(script.getSaveScript());
+
+        // set running directory
+        pb.directory(new File(ConstVars.SCRIPTDIR));
+        pb.inheritIO();
+        // start process
+        try {
+            System.out.println("Executing: " + pb.command());
+            Process process = pb.start();
+            scriptInfo.setArkServer(process);
+            if (process.exitValue() == 0) {
+                setStatus(false, ConstVars.EMPTY);
+            }
         } catch (IOException e) {
             System.out.println("something broke");
             e.printStackTrace();

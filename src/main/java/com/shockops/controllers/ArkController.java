@@ -27,19 +27,14 @@ public class ArkController extends ServerController {
         return arkService.createMapAndStartArkServer(sessionName, mapName);
     }
 
-    // @RequestMapping(value = "/ark/start", method = RequestMethod.GET, produces =
-    // "application/json")
-    // public TransferInfo startArkServer() {
-    // // TODO call bash script
-    // ArkScript script = new ArkScript();
-    // TransferInfo retval = new TransferInfo(scriptRunner.startServer(script));
-    //
-    // return retval;
-    // }
-
     @GetMapping(value = "/stop")
     public TransferInfo stopArkServer() {
         return arkService.stopArkServer();
+    }
+
+    @GetMapping(value = "/saveAndExport")
+    public TransferInfo saveAndExportArkServer() {
+        return arkService.saveAndExportArkServer();
     }
 
     @GetMapping(value = "/update")

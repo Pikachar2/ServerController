@@ -10,6 +10,7 @@ public final class ConstVars {
     public static final String ARKSTOPSCRIPT = ARKSCRIPTDIR + "/arkStop.sh";
     public static final String ARKUPDATESCRIPT = ARKSCRIPTDIR + "/arkUpdate.sh";
     public static final String ARKCREATESCRIPT = ARKSCRIPTDIR + "/arkCreateMap.sh";
+    public static final String ARKSAVESCRIPT = ARKSCRIPTDIR + "/arkSaveExport.sh";
 
     // SPECIFICS
     public static final String SERVERRUNNING = "Server is Running";

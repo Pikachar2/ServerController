@@ -7,15 +7,17 @@ public class BaseScript {
     private String updateScript;
     private String scriptDirectory;
     private String createScript;
+    private String saveScript;
 
     public BaseScript(String startScript, String stopScript, String updateScript, String scriptDirectory,
-                    String createScript) {
+                    String createScript, String saveScript) {
         super();
         this.startScript = startScript;
         this.stopScript = stopScript;
         this.updateScript = updateScript;
         this.scriptDirectory = scriptDirectory;
         this.createScript = createScript;
+        this.saveScript = saveScript;
     }
 
     public String getScriptDirectory() {
@@ -56,6 +58,14 @@ public class BaseScript {
 
     public void setCreateScript(String createScript) {
         this.createScript = createScript;
+    }
+
+    public String getSaveScript() {
+        return this.saveScript;
+    }
+
+    public void setSaveScript(String saveScript) {
+        this.saveScript = saveScript;
     }
 
 }

@@ -50,6 +50,13 @@ public class ArkService extends ServerService {
         return retval;
     }
 
+    public TransferInfo saveAndExportArkServer() {
+        ArkScript script = new ArkScript();
+        TransferInfo retval = new TransferInfo(scriptRunner.saveAndExportServer(script));
+
+        return retval;
+    }
+
     public TransferInfo createMapAndStartArkServer(String sessionName, String mapName) {
         ArkScript script = new ArkScript();
         TransferInfo retval = new TransferInfo(scriptRunner.createMapAndStartServer(script, sessionName, mapName));
