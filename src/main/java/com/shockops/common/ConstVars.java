@@ -10,6 +10,7 @@ public final class ConstVars {
     public static final String ARKSTOPSCRIPT = ARKSCRIPTDIR + "/arkStop.sh";
     public static final String ARKUPDATESCRIPT = ARKSCRIPTDIR + "/arkUpdate.sh";
     public static final String ARKCREATESCRIPT = ARKSCRIPTDIR + "/arkCreateMap.sh";
+    public static final String ARKSAVESCRIPT = ARKSCRIPTDIR + "/arkSaveExport.sh";
 
     // SPECIFICS
     public static final String SERVERRUNNING = "Server is Running";
@@ -28,7 +29,6 @@ public final class ConstVars {
     public static final String NOINSTANCE = "NO-INSTANCE";
 
     // URLs
-    public static final String ARKSERVERAPI = "https://arkservers.net/api/query/";
-    public static final String ARKSERVERIP = "69.143.240.10:27015";
-    public static final String ARKSERVERADDR = ARKSERVERAPI + ARKSERVERIP;
+    public static final String ARKSERVERS_API_QUERY_URL = "https://arkservers.net/api/query/";
+    public static final String THIS_SERVER_PORT = ":27015";
 }

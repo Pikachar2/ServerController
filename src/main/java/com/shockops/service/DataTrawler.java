@@ -30,7 +30,7 @@ public class DataTrawler {
     public DataTrawler() {
         super();
         this.data = new ArkData();
-        this.url = ConstVars.ARKSERVERADDR;
+        this.url = ConstVars.ARKSERVERS_API_QUERY_URL;
         this.restTemplate = new RestTemplate();
         initEntity();
     }
@@ -56,7 +56,9 @@ public class DataTrawler {
     }
 
     private String executeExchange() {
-        ResponseEntity<String> res = restTemplate.exchange(this.url, HttpMethod.GET, entity, String.class);
+        String completeUrl = this.url + IPAddressService.MY_IP;
+
+        ResponseEntity<String> res = restTemplate.exchange(completeUrl, HttpMethod.GET, entity, String.class);
         String responseBody = res.getBody().toString();
         return responseBody;
     }
