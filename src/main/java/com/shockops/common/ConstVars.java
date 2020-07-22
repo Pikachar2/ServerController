@@ -27,6 +27,7 @@ public final class ConstVars {
     public static final String UPDATING = "UPDATING";
     public static final String UPDATED = "UPDATED";
     public static final String NOINSTANCE = "NO-INSTANCE";
+    public static final String SAVED = "SAVED";
 
     // URLs
     public static final String ARKSERVERS_API_QUERY_URL = "https://arkservers.net/api/query/";

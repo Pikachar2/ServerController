@@ -2,6 +2,9 @@ package com.shockops.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -19,7 +22,6 @@ public class ScriptRunner extends Thread {
     private BaseScript bScript;
 
     public String startServer(BaseScript script, String sessionName) {
-        String retval = ConstVars.STARTING;
         this.bScript = script;
 
         if (scriptInfo.isRunning()) {
@@ -31,32 +33,13 @@ public class ScriptRunner extends Thread {
             return ConstVars.PREVIOUSINSTANCE;
         }
 
-        // ProcessBuilder pb = new ProcessBuilder("myshellScript.sh", "myArg1",
-        // "myArg2");
-        // create builder
-        ProcessBuilder pb = new ProcessBuilder(script.getStartScript(), sessionName);
-
-        // add env vars
-
-        // set running directory
-        pb.directory(new File(ConstVars.SCRIPTDIR));
-        pb.inheritIO();
-
-        // start process
-        try {
-            System.out.println("Executing: " + pb.command());
-            scriptInfo.setArkServer(pb.start());
-            setStatus(true, ConstVars.SERVERRUNNING);
-        } catch (IOException e) {
-            e.printStackTrace();
-            retval = ConstVars.FAIL;
-        }
+        String retval = runBasicScript(script.getStartScript(), ConstVars.STARTING, true, ConstVars.SERVERRUNNING,
+                        sessionName);
 
         return retval;
     }
 
     public String createMapAndStartServer(BaseScript script, String sessionName, String mapName) {
-        String retval = ConstVars.STARTING;
         this.bScript = script;
 
         if (scriptInfo.isRunning()) {
@@ -68,100 +51,34 @@ public class ScriptRunner extends Thread {
             return ConstVars.PREVIOUSINSTANCE;
         }
 
-        // ProcessBuilder pb = new ProcessBuilder("myshellScript.sh", "myArg1",
-        // "myArg2");
-        // create builder
-        ProcessBuilder pb = new ProcessBuilder(script.getCreateScript(), sessionName, mapName);
-
-        // add env vars
-
-        // set running directory
-        pb.directory(new File(ConstVars.SCRIPTDIR));
-        pb.inheritIO();
-
-        // start process
-        try {
-            System.out.println("Executing: " + pb.command());
-            scriptInfo.setArkServer(pb.start());
-            setStatus(true, ConstVars.SERVERRUNNING);
-        } catch (IOException e) {
-            e.printStackTrace();
-            retval = ConstVars.FAIL;
-        }
+        String retval = runBasicScript(script.getCreateScript(), ConstVars.STARTING, true, ConstVars.SERVERRUNNING,
+                        sessionName, mapName);
 
         return retval;
     }
 
     public String stopServer(BaseScript script) {
-        String retval = ConstVars.STOPPED;
-
         if (!scriptInfo.isRunning()) {
             return ConstVars.NOINSTANCE;
         }
 
         // TODO check if people are in the game
+        String retval = runBasicScript(script.getStopScript(), ConstVars.STOPPED, false, ConstVars.EMPTY);
 
-        // create builder
-        ProcessBuilder pb = new ProcessBuilder(script.getStopScript());
-
-        // set running directory
-        pb.directory(new File(ConstVars.SCRIPTDIR));
-        pb.inheritIO();
-        // start process
-        try {
-            System.out.println("Executing: " + pb.command());
-            Process process = pb.start();
-            scriptInfo.setArkServer(process);
-            if (process.exitValue() == 0) {
-                setStatus(false, ConstVars.EMPTY);
-            }
-        } catch (IOException e) {
-            System.out.println("something broke");
-            e.printStackTrace();
-            retval = ConstVars.FAIL;
-        }
-
-        System.out.println("just before returning...");
-        // new StatusThread(script).start();
         return retval;
     }
 
     public String saveAndExportServer(BaseScript script) {
-        String retval = ConstVars.STOPPED;
-
         if (!scriptInfo.isRunning()) {
             return ConstVars.NOINSTANCE;
         }
 
-        // TODO check if people are in the game
+        String retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVERRUNNING);
 
-        // create builder
-        ProcessBuilder pb = new ProcessBuilder(script.getSaveScript());
-
-        // set running directory
-        pb.directory(new File(ConstVars.SCRIPTDIR));
-        pb.inheritIO();
-        // start process
-        try {
-            System.out.println("Executing: " + pb.command());
-            Process process = pb.start();
-            scriptInfo.setArkServer(process);
-            if (process.exitValue() == 0) {
-                setStatus(false, ConstVars.EMPTY);
-            }
-        } catch (IOException e) {
-            System.out.println("something broke");
-            e.printStackTrace();
-            retval = ConstVars.FAIL;
-        }
-
-        System.out.println("just before returning...");
-        // new StatusThread(script).start();
         return retval;
     }
 
     public String updateServer(BaseScript script) {
-        String retval = ConstVars.UPDATED;
         this.bScript = script;
 
         if (scriptInfo.isRunning()) {
@@ -171,34 +88,40 @@ public class ScriptRunner extends Thread {
             return ConstVars.GAMERUNNING;
         }
 
+        String retval = runBasicScript(script.getUpdateScript(), ConstVars.UPDATED, true, ConstVars.SERVERUPDATING);
+
+        return retval;
+    }
+
+    public String runBasicScript(String scriptFunction, String successString, Boolean isRunning, String status,
+                    String... args) {
+        String retval = successString;
+        List<String> processBuilderArgsList = new ArrayList<>();
+        processBuilderArgsList.add(scriptFunction);
+        processBuilderArgsList.addAll(Arrays.asList(args));
+
+        // ProcessBuilder pb = new ProcessBuilder("myshellScript.sh", "myArg1",
+        // "myArg2");
         // create builder
-        ProcessBuilder pb = new ProcessBuilder(script.getUpdateScript());
+        ProcessBuilder pb =
+                        new ProcessBuilder(processBuilderArgsList.toArray(new String[processBuilderArgsList.size()]));
 
         // set running directory
         pb.directory(new File(ConstVars.SCRIPTDIR));
         pb.inheritIO();
-
         // start process
         try {
             System.out.println("Executing: " + pb.command());
             scriptInfo.setArkServer(pb.start());
-            setStatus(true, ConstVars.SERVERUPDATING);
+            setStatus(isRunning, status);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            System.out.println("something broke");
             e.printStackTrace();
             retval = ConstVars.FAIL;
         }
 
-        try {
-            scriptInfo.getArkServer().waitFor();
-            setStatus(false, ConstVars.EMPTY);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("Waiting failed...");
-
-        }
-
+        System.out.println("just before returning...");
+        // new StatusThread(script).start();
         return retval;
     }
 
