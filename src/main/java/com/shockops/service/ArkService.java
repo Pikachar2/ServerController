@@ -1,17 +1,29 @@
 package com.shockops.service;
 
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shockops.beans.ArkData;
 import com.shockops.beans.ArkScript;
+import com.shockops.beans.ArkSession;
 import com.shockops.beans.TransferInfo;
+import com.shockops.common.ConstVars;
 
 @Service
 public class ArkService extends ServerService {
 
     @Autowired
     private IPAddressService ipAddressService;
+
+    @Autowired
+    private CommandLineService commandLineService;
 
     public TransferInfo getServerStatus() {
         // TODO need to check arkServers to see if arkserver is actually up and
@@ -69,6 +81,39 @@ public class ArkService extends ServerService {
         TransferInfo retval = new TransferInfo(scriptRunner.startServer(script, sessionName));
 
         return retval;
+    }
+
+    public Set<ArkSession> getSessions() {
+        Set<ArkSession> arkSessions = new HashSet<>();
+
+        // get list of sessions
+        // NOTE: Test local on "C:\\"
+        Set<String> sessions = commandLineService.listDirectoriesUsingJavaIO(ConstVars.ARK_SAVED_MAPS_DIR);
+
+        // File filter
+        Predicate<? super File> filter = (file -> {
+            Boolean isNotDir = !file.isDirectory();
+            String fileName = file.getName();
+            Boolean hasArkExtension = FilenameUtils.isExtension(fileName, "ark");
+            Boolean isNotDateName = !fileName.matches(ConstVars.ARK_DATE_FILENAME_REGEX);
+            return isNotDir && hasArkExtension && isNotDateName;
+        });
+
+        // Retrieve map names for each session
+        for (String session : sessions) {
+            // NOTE: Test local on SavedArks Folder
+            String sessionSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + session + "/Saved/SavedArks";
+            Set<String> mapList = commandLineService.listFilesUsingJavaIOWithFilter(sessionSaveDir, filter);
+
+            // Drop the file extension
+            mapList = mapList.stream().map(s -> s.endsWith(".ark") ? s.substring(0, s.length() - 4) : s)
+                            .collect(Collectors.toSet());
+
+            ArkSession arkSession = new ArkSession(session, mapList);
+            arkSessions.add(arkSession);
+        }
+
+        return arkSessions;
     }
 
 }

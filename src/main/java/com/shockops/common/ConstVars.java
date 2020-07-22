@@ -6,6 +6,8 @@ public final class ConstVars {
     public static final String SCRIPTDIR = "/home/zach/Scripts";
     public static final String ARKSCRIPTDIR = SCRIPTDIR + "/ArkScripts";
     public static final String WORKDIR = "/home/zach/Scripts/ArkScripts";
+    public static final String ARK_SAVED_MAPS_DIR = "/home/zach/Servers/Ark_Server/ShooterGame/SavedMaps";
+
     public static final String ARKSTARTSCRIPT = ARKSCRIPTDIR + "/arkStartup.sh";
     public static final String ARKSTOPSCRIPT = ARKSCRIPTDIR + "/arkStop.sh";
     public static final String ARKUPDATESCRIPT = ARKSCRIPTDIR + "/arkUpdate.sh";
@@ -32,4 +34,7 @@ public final class ConstVars {
     // URLs
     public static final String ARKSERVERS_API_QUERY_URL = "https://arkservers.net/api/query/";
     public static final String THIS_SERVER_PORT = ":27015";
+
+    // REGEX
+    public static final String ARK_DATE_FILENAME_REGEX = ".+(_P)?_\\d\\d\\.\\d\\d\\.\\d{4}+_\\d\\d\\.\\d\\d\\.\\d\\d\\.ark$";
 }

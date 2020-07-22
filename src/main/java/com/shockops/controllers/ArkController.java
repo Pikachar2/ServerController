@@ -1,11 +1,14 @@
 package com.shockops.controllers;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shockops.beans.ArkSession;
 import com.shockops.beans.TransferInfo;
 import com.shockops.service.ArkService;
 
@@ -47,4 +50,8 @@ public class ArkController extends ServerController {
         return arkService.getServerStatus();
     }
 
+    @GetMapping("/sessions")
+    public Set<ArkSession> getSessions() {
+        return arkService.getSessions();
+    }
 }
