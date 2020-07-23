@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shockops.beans.ArkSession;
 import com.shockops.beans.TransferInfo;
+import com.shockops.dto.ArkStatusResponse;
 import com.shockops.service.ArkService;
 
 @RestController
 @RequestMapping("/ark")
-public class ArkController extends ServerController {
+public class ArkController {
 
     @Autowired
     private ArkService arkService;
@@ -46,7 +47,7 @@ public class ArkController extends ServerController {
     }
 
     @GetMapping(value = "/status")
-    public TransferInfo getStatus() {
+    public ArkStatusResponse getStatus() {
         return arkService.getServerStatus();
     }
 

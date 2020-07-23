@@ -13,11 +13,20 @@ import org.springframework.stereotype.Service;
 import com.shockops.beans.ArkData;
 import com.shockops.beans.ArkScript;
 import com.shockops.beans.ArkSession;
+import com.shockops.beans.ScriptInfo;
 import com.shockops.beans.TransferInfo;
 import com.shockops.common.ConstVars;
+import com.shockops.dto.ArkStatusResponse;
 
 @Service
-public class ArkService extends ServerService {
+public class ArkService {
+
+    @Autowired
+    protected DataTrawler dataTrawler;
+    @Autowired
+    protected ScriptRunner scriptRunner;
+    @Autowired
+    protected ScriptInfo scriptInfo;
 
     @Autowired
     private IPAddressService ipAddressService;
@@ -25,7 +34,7 @@ public class ArkService extends ServerService {
     @Autowired
     private CommandLineService commandLineService;
 
-    public TransferInfo getServerStatus() {
+    public ArkStatusResponse getServerStatus() {
         // TODO need to check arkServers to see if arkserver is actually up and
         // running.
         /*
@@ -41,11 +50,11 @@ public class ArkService extends ServerService {
         ArkData data = dataTrawler.exchangeAndConvert();
 
         if ((data == null) || data.equals(null)) {
-            return new TransferInfo("Offline");
+            return new ArkStatusResponse("Offline");
         }
         // TODO check the data to see if the server is in fact up and running
 
-        return new TransferInfo("Online");
+        return new ArkStatusResponse("Online");
     }
 
     public TransferInfo updateArkServer() {
