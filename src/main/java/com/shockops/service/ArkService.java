@@ -86,17 +86,14 @@ public class ArkService {
 
     public TransferInfo createMapAndStartArkServer(String sessionName, String mapName) {
         ArkScript script = new ArkScript();
-        // TransferInfo retval = new TransferInfo(scriptRunner.createMapAndStartServer(script,
-        // sessionName, mapName));
-        TransferInfo retval = new TransferInfo("CREATE-HIT");
+        TransferInfo retval = new TransferInfo(scriptRunner.createMapAndStartServer(script, sessionName, mapName));
 
         return retval;
     }
 
     public TransferInfo startArkServer(String sessionName) {
         ArkScript script = new ArkScript();
-        // TransferInfo retval = new TransferInfo(scriptRunner.startServer(script, sessionName));
-        TransferInfo retval = new TransferInfo("STARTHIT");
+        TransferInfo retval = new TransferInfo(scriptRunner.startServer(script, sessionName));
         return retval;
     }
 
@@ -105,9 +102,8 @@ public class ArkService {
 
         // get list of sessions
         // NOTE: Test local on "C:\\"
-        Set<String> sessions = commandLineService.listDirectoriesUsingJavaIO("C:\\");
-        // Set<String> sessions =
-        // commandLineService.listDirectoriesUsingJavaIO(ConstVars.ARK_SAVED_MAPS_DIR);
+        // Set<String> sessions = commandLineService.listDirectoriesUsingJavaIO("C:\\");
+        Set<String> sessions = commandLineService.listDirectoriesUsingJavaIO(ConstVars.ARK_SAVED_MAPS_DIR);
 
         // File filter
         Predicate<? super File> filter = (file -> {
@@ -121,10 +117,10 @@ public class ArkService {
         // Retrieve map names for each session
         for (String session : sessions) {
             // NOTE: Test local on SavedArks Folder
-            // String sessionSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + session +
-            // "/Saved/SavedArks";
-            String sessionSaveDir =
-                            "F:\\Program Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\SavedArks";
+            String sessionSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + session + "/Saved/SavedArks";
+            // String sessionSaveDir =
+            // "F:\\Program
+            // Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\SavedArks";
             Set<String> mapList = commandLineService.listFilesUsingJavaIOWithFilter(sessionSaveDir, filter);
 
             // Drop the file extension
@@ -139,10 +135,10 @@ public class ArkService {
     }
 
     public ArkConfigResponse getConfig(String sessionName) {
-        String configSaveDir =
-                        "F:\\Program Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\Config\\WindowsServer\\";
-        // String configSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + sessionName +
-        // "/Saved/Config/LinuxServer/";
+        // String configSaveDir =
+        // "F:\\Program
+        // Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\Config\\WindowsServer\\";
+        String configSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + sessionName + "/Saved/Config/LinuxServer/";
         String configFileName = "GameUserSettings.ini";
         String configData = "";
 
@@ -156,10 +152,10 @@ public class ArkService {
     }
 
     public String saveConfig(String sessionName, String configData) {
-        String configSaveDir =
-                        "F:\\Program Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\Config\\WindowsServer\\";
-        // String configSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + sessionName +
-        // "/Saved/Config/LinuxServer/";
+        // String configSaveDir =
+        // "F:\\Program
+        // Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\Config\\WindowsServer\\";
+        String configSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + sessionName + "/Saved/Config/LinuxServer/";
         String configFileName = "GameUserSettings.ini";
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(configSaveDir + configFileName))) {
