@@ -1,12 +1,17 @@
 package com.shockops.service;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +21,7 @@ import com.shockops.beans.ArkSession;
 import com.shockops.beans.ScriptInfo;
 import com.shockops.beans.TransferInfo;
 import com.shockops.common.ConstVars;
+import com.shockops.dto.ArkConfigResponse;
 import com.shockops.dto.ArkStatusResponse;
 
 @Service
@@ -80,15 +86,17 @@ public class ArkService {
 
     public TransferInfo createMapAndStartArkServer(String sessionName, String mapName) {
         ArkScript script = new ArkScript();
-        TransferInfo retval = new TransferInfo(scriptRunner.createMapAndStartServer(script, sessionName, mapName));
+        // TransferInfo retval = new TransferInfo(scriptRunner.createMapAndStartServer(script,
+        // sessionName, mapName));
+        TransferInfo retval = new TransferInfo("CREATE-HIT");
 
         return retval;
     }
 
     public TransferInfo startArkServer(String sessionName) {
         ArkScript script = new ArkScript();
-        TransferInfo retval = new TransferInfo(scriptRunner.startServer(script, sessionName));
-
+        // TransferInfo retval = new TransferInfo(scriptRunner.startServer(script, sessionName));
+        TransferInfo retval = new TransferInfo("STARTHIT");
         return retval;
     }
 
@@ -97,7 +105,9 @@ public class ArkService {
 
         // get list of sessions
         // NOTE: Test local on "C:\\"
-        Set<String> sessions = commandLineService.listDirectoriesUsingJavaIO(ConstVars.ARK_SAVED_MAPS_DIR);
+        Set<String> sessions = commandLineService.listDirectoriesUsingJavaIO("C:\\");
+        // Set<String> sessions =
+        // commandLineService.listDirectoriesUsingJavaIO(ConstVars.ARK_SAVED_MAPS_DIR);
 
         // File filter
         Predicate<? super File> filter = (file -> {
@@ -111,7 +121,10 @@ public class ArkService {
         // Retrieve map names for each session
         for (String session : sessions) {
             // NOTE: Test local on SavedArks Folder
-            String sessionSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + session + "/Saved/SavedArks";
+            // String sessionSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + session +
+            // "/Saved/SavedArks";
+            String sessionSaveDir =
+                            "F:\\Program Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\SavedArks";
             Set<String> mapList = commandLineService.listFilesUsingJavaIOWithFilter(sessionSaveDir, filter);
 
             // Drop the file extension
@@ -125,4 +138,35 @@ public class ArkService {
         return arkSessions;
     }
 
+    public ArkConfigResponse getConfig(String sessionName) {
+        String configSaveDir =
+                        "F:\\Program Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\Config\\WindowsServer\\";
+        // String configSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + sessionName +
+        // "/Saved/Config/LinuxServer/";
+        String configFileName = "GameUserSettings.ini";
+        String configData = "";
+
+        try (FileInputStream fis = new FileInputStream(configSaveDir + configFileName)) {
+            configData = IOUtils.toString(fis, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return new ArkConfigResponse(configData);
+    }
+
+    public String saveConfig(String sessionName, String configData) {
+        String configSaveDir =
+                        "F:\\Program Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\Config\\WindowsServer\\";
+        // String configSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + sessionName +
+        // "/Saved/Config/LinuxServer/";
+        String configFileName = "GameUserSettings.ini";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(configSaveDir + configFileName))) {
+            writer.write(configData);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return "Config Saved!";
+    }
 }
