@@ -1,8 +1,8 @@
 package com.shockops.beans;
 
-import javax.inject.Named;
+import org.springframework.stereotype.Component;
 
-@Named
+@Component
 public class ScriptInfo {
 
     private boolean running = false;

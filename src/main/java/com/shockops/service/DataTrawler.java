@@ -3,13 +3,12 @@ package com.shockops.service;
 import java.io.IOException;
 import java.util.Arrays;
 
-import javax.inject.Named;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -18,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shockops.beans.ArkData;
 import com.shockops.common.ConstVars;
 
-@Named
+@Service
 public class DataTrawler {
 
     private ArkData data;

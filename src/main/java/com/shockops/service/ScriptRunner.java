@@ -6,18 +6,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.shockops.beans.ArkData;
 import com.shockops.beans.BaseScript;
 import com.shockops.beans.ScriptInfo;
 import com.shockops.common.ConstVars;
 
-@Named
+@Service
 public class ScriptRunner extends Thread {
 
-    @Inject
+    @Autowired
     private ScriptInfo scriptInfo;
     private BaseScript bScript;
 
