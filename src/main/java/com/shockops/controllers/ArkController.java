@@ -59,13 +59,15 @@ public class ArkController {
         return arkService.getSessions();
     }
 
-    @GetMapping("/config/{sessionName}")
-    public ArkConfigResponse getConfig(@PathVariable(value = "sessionName") String sessionName) {
-        return arkService.getConfig(sessionName);
+    @GetMapping("/config/{sessionName}/{configFileName}")
+    public ArkConfigResponse getConfig(@PathVariable(value = "sessionName") String sessionName,
+                    @PathVariable(value = "configFileName") String configFileName) {
+        return arkService.getConfig(sessionName, configFileName);
     }
 
-    @PostMapping("/config/{sessionName}")
-    public String saveConfig(@RequestBody String configData, @PathVariable(value = "sessionName") String sessionName) {
-        return arkService.saveConfig(sessionName, configData);
+    @PostMapping("/config/{sessionName}/{configFileName}")
+    public String saveConfig(@RequestBody String configData, @PathVariable(value = "sessionName") String sessionName,
+                    @PathVariable(value = "configFileName") String configFileName) {
+        return arkService.saveConfig(sessionName, configData, configFileName);
     }
 }
