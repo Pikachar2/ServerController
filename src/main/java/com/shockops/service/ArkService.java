@@ -134,15 +134,15 @@ public class ArkService {
         return arkSessions;
     }
 
-    public ArkConfigResponse getConfig(String sessionName) {
+    public ArkConfigResponse getConfig(String sessionName, String configFileName) {
         // String configSaveDir =
         // "F:\\Program
         // Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\Config\\WindowsServer\\";
         String configSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + sessionName + "/Saved/Config/LinuxServer/";
-        String configFileName = "GameUserSettings.ini";
         String configData = "";
+        // configFileName += ".ini";
 
-        try (FileInputStream fis = new FileInputStream(configSaveDir + configFileName)) {
+        try (FileInputStream fis = new FileInputStream(configSaveDir + configFileName + ".ini")) {
             configData = IOUtils.toString(fis, "UTF-8");
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -151,14 +151,13 @@ public class ArkService {
         return new ArkConfigResponse(configData);
     }
 
-    public String saveConfig(String sessionName, String configData) {
+    public String saveConfig(String sessionName, String configData, String configFileName) {
         // String configSaveDir =
         // "F:\\Program
         // Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\Config\\WindowsServer\\";
         String configSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + sessionName + "/Saved/Config/LinuxServer/";
-        String configFileName = "GameUserSettings.ini";
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(configSaveDir + configFileName))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(configSaveDir + configFileName + ".ini"))) {
             writer.write(configData);
         } catch (IOException ex) {
             ex.printStackTrace();
