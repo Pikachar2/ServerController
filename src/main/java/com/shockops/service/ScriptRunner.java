@@ -95,6 +95,8 @@ public class ScriptRunner extends Thread {
 
     public String runBasicScript(String scriptFunction, String successString, Boolean isRunning, String status,
                     String... args) {
+        // NOTE: READ OUTPUT ASYNC
+        // https://stackoverflow.com/questions/30725175/java-read-process-output-when-its-finished
         String retval = successString;
         List<String> processBuilderArgsList = new ArrayList<>();
         processBuilderArgsList.add(scriptFunction);
