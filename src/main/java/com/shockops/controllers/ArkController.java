@@ -70,4 +70,10 @@ public class ArkController {
                     @PathVariable(value = "configFileName") String configFileName) {
         return arkService.saveConfig(sessionName, configData, configFileName);
     }
+
+    @GetMapping("/maps")
+    public Set<String> getMaps() {
+        return arkService.getMaps();
+    }
+
 }

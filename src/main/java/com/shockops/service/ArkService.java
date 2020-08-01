@@ -164,4 +164,12 @@ public class ArkService {
         }
         return "Config Saved!";
     }
+
+    public Set<String> getMaps() {
+        Set<String> maps = new HashSet<>();
+
+        // TODO: Basic file get of ConstVars.ARKSCRIPTDIR/MapNames.txt
+
+        return maps;
+    }
 }
