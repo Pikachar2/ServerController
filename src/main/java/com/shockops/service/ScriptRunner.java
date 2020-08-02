@@ -1,11 +1,15 @@
 package com.shockops.service;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,6 +96,42 @@ public class ScriptRunner extends Thread {
 
         return retval;
     }
+    //
+    // public String runBasicScript(String scriptFunction, String successString, Boolean isRunning,
+    // String status,
+    // String... args) {
+    // // NOTE: READ OUTPUT ASYNC
+    // // https://stackoverflow.com/questions/30725175/java-read-process-output-when-its-finished
+    // String retval = successString;
+    // List<String> processBuilderArgsList = new ArrayList<>();
+    // processBuilderArgsList.add(scriptFunction);
+    // processBuilderArgsList.addAll(Arrays.asList(args));
+    //
+    // // ProcessBuilder pb = new ProcessBuilder("myshellScript.sh", "myArg1",
+    // // "myArg2");
+    // // create builder
+    // ProcessBuilder pb =
+    // new ProcessBuilder(processBuilderArgsList.toArray(new
+    // String[processBuilderArgsList.size()]));
+    //
+    // // set running directory
+    // pb.directory(new File(ConstVars.SCRIPTDIR));
+    // pb.inheritIO();
+    // // start process
+    // try {
+    // System.out.println("Executing: " + pb.command());
+    // scriptInfo.setArkServer(pb.start());
+    // setStatus(isRunning, status);
+    // } catch (IOException e) {
+    // System.out.println("something broke");
+    // e.printStackTrace();
+    // retval = ConstVars.FAIL;
+    // }
+    //
+    // System.out.println("just before returning...");
+    // // new StatusThread(script).start();
+    // return retval;
+    // }
 
     public String runBasicScript(String scriptFunction, String successString, Boolean isRunning, String status,
                     String... args) {
@@ -110,11 +150,28 @@ public class ScriptRunner extends Thread {
 
         // set running directory
         pb.directory(new File(ConstVars.SCRIPTDIR));
-        pb.inheritIO();
+        // pb.inheritIO();
         // start process
         try {
             System.out.println("Executing: " + pb.command());
-            scriptInfo.setArkServer(pb.start());
+            Process core = pb.start();
+            InputStream stream = core.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            new Thread(() -> {
+                try {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        System.out.println(line);
+                        if (StringUtils.equalsIgnoreCase(line, "Hello World")) {
+                            System.out.println("BACON");
+                        }
+                    }
+                } catch (IOException ex) {
+                    // TODO: stub out
+                }
+            }).start();
+
+            scriptInfo.setArkServer(core);
             setStatus(isRunning, status);
         } catch (IOException e) {
             System.out.println("something broke");
