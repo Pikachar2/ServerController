@@ -21,7 +21,7 @@ public class ScriptRunner extends Thread {
     private ScriptInfo scriptInfo;
     private BaseScript bScript;
 
-    public String startServer(BaseScript script, String sessionName) {
+    public String startServer(BaseScript script, String sessionName, String mapName) {
         this.bScript = script;
 
         if (scriptInfo.isRunning()) {
@@ -34,7 +34,7 @@ public class ScriptRunner extends Thread {
         }
 
         String retval = runBasicScript(script.getStartScript(), ConstVars.STARTING, true, ConstVars.SERVERRUNNING,
-                        sessionName);
+                        sessionName, mapName);
 
         return retval;
     }

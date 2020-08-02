@@ -1,5 +1,6 @@
 package com.shockops.controllers;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,10 @@ public class ArkController {
     @Autowired
     private ArkService arkService;
 
-    @GetMapping(value = "/start/{sessionName}")
-    public TransferInfo startArkServer(@PathVariable(value = "sessionName") String sessionName) {
-        return arkService.startArkServer(sessionName);
+    @GetMapping(value = "/start/{sessionName}/{mapName}")
+    public TransferInfo startArkServer(@PathVariable(value = "sessionName") String sessionName,
+                    @PathVariable(value = "mapName") String mapName) {
+        return arkService.startArkServer(sessionName, mapName);
     }
 
     @GetMapping(value = "/createmap/{sessionName}/{mapName}")
@@ -72,7 +74,7 @@ public class ArkController {
     }
 
     @GetMapping("/maps")
-    public Set<String> getMaps() {
+    public List<String> getMaps() {
         return arkService.getMaps();
     }
 

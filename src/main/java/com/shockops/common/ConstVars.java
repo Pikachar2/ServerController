@@ -13,6 +13,7 @@ public final class ConstVars {
     public static final String ARKUPDATESCRIPT = ARKSCRIPTDIR + "/arkUpdate.sh";
     public static final String ARKCREATESCRIPT = ARKSCRIPTDIR + "/arkCreateMap.sh";
     public static final String ARKSAVESCRIPT = ARKSCRIPTDIR + "/arkSaveExport.sh";
+    public static final String ARK_MAP_FILE = ARKSCRIPTDIR + "/MapNames.txt";
 
     // SPECIFICS
     public static final String SERVERRUNNING = "Server is Running";
@@ -36,5 +37,6 @@ public final class ConstVars {
     public static final String THIS_SERVER_PORT = ":27015";
 
     // REGEX
-    public static final String ARK_DATE_FILENAME_REGEX = ".+(_P)?_\\d\\d\\.\\d\\d\\.\\d{4}+_\\d\\d\\.\\d\\d\\.\\d\\d\\.ark$";
+    public static final String ARK_DATE_FILENAME_REGEX =
+                    ".+(_P)?_\\d\\d\\.\\d\\d\\.\\d{4}+_\\d\\d\\.\\d\\d\\.\\d\\d\\.ark$";
 }
