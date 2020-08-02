@@ -21,7 +21,7 @@ public class ScriptRunner extends Thread {
     private ScriptInfo scriptInfo;
     private BaseScript bScript;
 
-    public String startServer(BaseScript script, String sessionName) {
+    public String startServer(BaseScript script, String sessionName, String mapName) {
         this.bScript = script;
 
         if (scriptInfo.isRunning()) {
@@ -34,7 +34,7 @@ public class ScriptRunner extends Thread {
         }
 
         String retval = runBasicScript(script.getStartScript(), ConstVars.STARTING, true, ConstVars.SERVERRUNNING,
-                        sessionName);
+                        sessionName, mapName);
 
         return retval;
     }
@@ -95,6 +95,8 @@ public class ScriptRunner extends Thread {
 
     public String runBasicScript(String scriptFunction, String successString, Boolean isRunning, String status,
                     String... args) {
+        // NOTE: READ OUTPUT ASYNC
+        // https://stackoverflow.com/questions/30725175/java-read-process-output-when-its-finished
         String retval = successString;
         List<String> processBuilderArgsList = new ArrayList<>();
         processBuilderArgsList.add(scriptFunction);

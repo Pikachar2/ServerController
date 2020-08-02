@@ -5,7 +5,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -91,9 +95,9 @@ public class ArkService {
         return retval;
     }
 
-    public TransferInfo startArkServer(String sessionName) {
+    public TransferInfo startArkServer(String sessionName, String mapName) {
         ArkScript script = new ArkScript();
-        TransferInfo retval = new TransferInfo(scriptRunner.startServer(script, sessionName));
+        TransferInfo retval = new TransferInfo(scriptRunner.startServer(script, sessionName, mapName));
         return retval;
     }
 
@@ -163,5 +167,18 @@ public class ArkService {
             ex.printStackTrace();
         }
         return "Config Saved!";
+    }
+
+    public List<String> getMaps() {
+        List<String> maps = new ArrayList<>();
+        try {
+            // List<String> allLines =
+            // Files.readAllLines(Paths.get("C:\\Users\\highi\\Desktop\\MapNames.txt"));
+            List<String> allLines = Files.readAllLines(Paths.get(ConstVars.ARK_MAP_FILE));
+            maps.addAll(allLines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return maps;
     }
 }
