@@ -1,7 +1,10 @@
 package com.shockops.service;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +16,10 @@ import com.shockops.beans.ArkData;
 import com.shockops.beans.BaseScript;
 import com.shockops.beans.ScriptInfo;
 import com.shockops.common.ConstVars;
+import com.shockops.common.StatusLock;
+import com.shockops.enums.StatusEnum;
+import com.shockops.types.MultiArgFunction;
+import com.shockops.util.StatusMapUtil;
 
 @Service
 public class ScriptRunner extends Thread {
@@ -24,17 +31,13 @@ public class ScriptRunner extends Thread {
     public String startServer(BaseScript script, String sessionName, String mapName) {
         this.bScript = script;
 
-        if (scriptInfo.isRunning()) {
-            if (scriptInfo.getStatus().equals(ConstVars.SERVERUPDATING)) {
-                return ConstVars.UPDATING;
-            } else if (new DataTrawler().exchangeAndConvert() == null) {
-                return ConstVars.STARTING;
-            }
-            return ConstVars.PREVIOUSINSTANCE;
+        if (StatusLock.isRunning()) {
+            return StatusLock.getStatusMsg();
         }
 
+        StatusLock.setStatusEnum(StatusEnum.STARTING_SCRIPT, sessionName, mapName);
         String retval = runBasicScript(script.getStartScript(), ConstVars.STARTING, true, ConstVars.SERVERRUNNING,
-                        sessionName, mapName);
+                        StatusMapUtil::statusCheckAndUpdateStarted, sessionName, mapName);
 
         return retval;
     }
@@ -42,38 +45,38 @@ public class ScriptRunner extends Thread {
     public String createMapAndStartServer(BaseScript script, String sessionName, String mapName) {
         this.bScript = script;
 
-        if (scriptInfo.isRunning()) {
-            if (scriptInfo.getStatus().equals(ConstVars.SERVERUPDATING)) {
-                return ConstVars.UPDATING;
-            } else if (new DataTrawler().exchangeAndConvert() == null) {
-                return ConstVars.STARTING;
-            }
-            return ConstVars.PREVIOUSINSTANCE;
+        if (StatusLock.isRunning()) {
+            return StatusLock.getStatusMsg();
         }
 
+        StatusLock.setStatusEnum(StatusEnum.CREATING, sessionName, mapName);
         String retval = runBasicScript(script.getCreateScript(), ConstVars.STARTING, true, ConstVars.SERVERRUNNING,
-                        sessionName, mapName);
+                        StatusMapUtil::statusCheckAndUpdateCreated, sessionName, mapName);
 
         return retval;
     }
 
     public String stopServer(BaseScript script) {
-        if (!scriptInfo.isRunning()) {
-            return ConstVars.NOINSTANCE;
+        if (!StatusLock.isRunning()) {
+            return StatusLock.getStatusMsg();
         }
 
+        StatusLock.setStatusEnum(StatusEnum.STOPPING);
         // TODO check if people are in the game
-        String retval = runBasicScript(script.getStopScript(), ConstVars.STOPPED, false, ConstVars.EMPTY);
+        String retval = runBasicScript(script.getStopScript(), ConstVars.STOPPED, false, ConstVars.EMPTY,
+                        StatusMapUtil::statusCheckAndUpdateStopped);
 
         return retval;
     }
 
     public String saveAndExportServer(BaseScript script) {
-        if (!scriptInfo.isRunning()) {
-            return ConstVars.NOINSTANCE;
+        if (!StatusLock.isRunning()) {
+            return StatusLock.getStatusMsg();
         }
 
-        String retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVERRUNNING);
+        StatusLock.setStatusEnum(StatusEnum.SAVING, StatusLock.getSessionName(), StatusLock.getMapName());
+        String retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVERRUNNING,
+                        StatusMapUtil::statusCheckAndUpdateSaved);
 
         return retval;
     }
@@ -81,20 +84,20 @@ public class ScriptRunner extends Thread {
     public String updateServer(BaseScript script) {
         this.bScript = script;
 
-        if (scriptInfo.isRunning()) {
-            if (scriptInfo.getStatus().equals(ConstVars.SERVERUPDATING)) {
-                return ConstVars.UPDATING;
-            }
-            return ConstVars.GAMERUNNING;
+        if (StatusLock.isRunning()) {
+            return StatusLock.getStatusMsg();
         }
 
-        String retval = runBasicScript(script.getUpdateScript(), ConstVars.UPDATED, true, ConstVars.SERVERUPDATING);
+        StatusLock.setStatusEnum(StatusEnum.UPDATING);
+        String retval = runBasicScript(script.getUpdateScript(), ConstVars.UPDATED, true, ConstVars.SERVERUPDATING,
+                        StatusMapUtil::statusCheckAndUpdateUpdatedServer);
 
         return retval;
     }
 
+    @SuppressWarnings("resource")
     public String runBasicScript(String scriptFunction, String successString, Boolean isRunning, String status,
-                    String... args) {
+                    MultiArgFunction<String> statusMethod, String... args) {
         // NOTE: READ OUTPUT ASYNC
         // https://stackoverflow.com/questions/30725175/java-read-process-output-when-its-finished
         String retval = successString;
@@ -110,11 +113,26 @@ public class ScriptRunner extends Thread {
 
         // set running directory
         pb.directory(new File(ConstVars.SCRIPTDIR));
-        pb.inheritIO();
+        // pb.inheritIO();
         // start process
         try {
             System.out.println("Executing: " + pb.command());
-            scriptInfo.setArkServer(pb.start());
+            Process core = pb.start();
+            InputStream stream = core.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            new Thread(() -> {
+                try {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        System.out.println(line);
+                        statusMethod.apply(line, args);
+                    }
+                } catch (IOException ex) {
+                    // TODO: stub out
+                }
+            }).start();
+
+            scriptInfo.setArkServer(core);
             setStatus(isRunning, status);
         } catch (IOException e) {
             System.out.println("something broke");

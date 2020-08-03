@@ -14,7 +14,7 @@ package com.shockops.types;
  * @param <R>
  */
 @FunctionalInterface
-public interface MultiArgFunction<R, A> {
+public interface MultiArgFunction<A> {
     @SuppressWarnings("unchecked")
-    R apply(A... a);
+    void apply(String line, A... a);
 }

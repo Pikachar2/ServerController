@@ -2,12 +2,13 @@ package com.shockops.common;
 
 public final class ConstVars {
 
-    // public static final String SCRIPTDIR = "C:\\";
+    // public static final String SCRIPTDIR = "C:\\Users\\highi\\Desktop";
     public static final String SCRIPTDIR = "/home/zach/Scripts";
     public static final String ARKSCRIPTDIR = SCRIPTDIR + "/ArkScripts";
     public static final String WORKDIR = "/home/zach/Scripts/ArkScripts";
     public static final String ARK_SAVED_MAPS_DIR = "/home/zach/Servers/Ark_Server/ShooterGame/SavedMaps";
 
+    // public static final String ARKSTARTSCRIPT = ARKSCRIPTDIR + "/arkStartup.bat";
     public static final String ARKSTARTSCRIPT = ARKSCRIPTDIR + "/arkStartup.sh";
     public static final String ARKSTOPSCRIPT = ARKSCRIPTDIR + "/arkStop.sh";
     public static final String ARKUPDATESCRIPT = ARKSCRIPTDIR + "/arkUpdate.sh";
