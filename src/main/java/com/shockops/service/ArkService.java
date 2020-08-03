@@ -25,8 +25,10 @@ import com.shockops.beans.ArkSession;
 import com.shockops.beans.ScriptInfo;
 import com.shockops.beans.TransferInfo;
 import com.shockops.common.ConstVars;
+import com.shockops.common.StatusLock;
 import com.shockops.dto.ArkConfigResponse;
 import com.shockops.dto.ArkStatusResponse;
+import com.shockops.enums.StatusEnum;
 
 @Service
 public class ArkService {
@@ -58,13 +60,46 @@ public class ArkService {
         ipAddressService.getMyIp();
 
         ArkData data = dataTrawler.exchangeAndConvert();
-
+        Boolean isFullyOnline;
         if ((data == null) || data.equals(null)) {
-            return new ArkStatusResponse("Offline");
+            isFullyOnline = false;
+        } else {
+            isFullyOnline = true;
         }
         // TODO check the data to see if the server is in fact up and running
+        // return new ArkStatusResponse("Offline");
 
-        return new ArkStatusResponse("Online");
+        // return new ArkStatusResponse("Online");
+        return new ArkStatusResponse(correlateStatus(isFullyOnline));
+    }
+
+    private String correlateStatus(Boolean isFullyOnline) {
+        StatusEnum statEnum = StatusLock.getStatusEnum();
+
+        switch (statEnum) {
+            case STARTING_SCRIPT:
+            case SPINNING_UP:
+            case CREATING:
+            case CREATED:
+                if (!isFullyOnline) {
+                    return StatusLock.getStatusMsg();
+                }
+                StatusLock.setStatusEnum(StatusEnum.STARTED, StatusLock.getSessionName(), StatusLock.getMapName());
+                break;
+            case STARTED:
+                if (!isFullyOnline) {
+                    StatusLock.setStatusEnum(StatusEnum.OFFLINE);
+                }
+                break;
+            case OFFLINE:
+                if (isFullyOnline) {
+                    StatusLock.setStatusEnum(StatusEnum.STARTED, "UNKNOWN", "UNKNOWN");
+                }
+                break;
+            default:
+        }
+
+        return StatusLock.getStatusMsg();
     }
 
     public TransferInfo updateArkServer() {
@@ -161,11 +196,19 @@ public class ArkService {
         // Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\Config\\WindowsServer\\";
         String configSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + sessionName + "/Saved/Config/LinuxServer/";
 
+        // check if status allowed
+        if (StatusLock.isRunning()) {
+            return StatusLock.getStatusMsg();
+        }
+
+        StatusLock.setStatusEnum(StatusEnum.CONFIG_SAVING);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(configSaveDir + configFileName + ".ini"))) {
             writer.write(configData);
         } catch (IOException ex) {
             ex.printStackTrace();
+            StatusLock.setStatusEnum(StatusEnum.OFFLINE);
         }
+        StatusLock.setStatusEnum(StatusEnum.CONFIG_SAVED);
         return "Config Saved!";
     }
 

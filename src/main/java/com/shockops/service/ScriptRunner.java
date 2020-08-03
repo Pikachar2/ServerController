@@ -16,6 +16,8 @@ import com.shockops.beans.ArkData;
 import com.shockops.beans.BaseScript;
 import com.shockops.beans.ScriptInfo;
 import com.shockops.common.ConstVars;
+import com.shockops.common.StatusLock;
+import com.shockops.enums.StatusEnum;
 import com.shockops.types.MultiArgFunction;
 import com.shockops.util.StatusMapUtil;
 
@@ -29,15 +31,11 @@ public class ScriptRunner extends Thread {
     public String startServer(BaseScript script, String sessionName, String mapName) {
         this.bScript = script;
 
-        if (scriptInfo.isRunning()) {
-            if (scriptInfo.getStatus().equals(ConstVars.SERVERUPDATING)) {
-                return ConstVars.UPDATING;
-            } else if (new DataTrawler().exchangeAndConvert() == null) {
-                return ConstVars.STARTING;
-            }
-            return ConstVars.PREVIOUSINSTANCE;
+        if (StatusLock.isRunning()) {
+            return StatusLock.getStatusMsg();
         }
 
+        StatusLock.setStatusEnum(StatusEnum.STARTING_SCRIPT, sessionName, mapName);
         String retval = runBasicScript(script.getStartScript(), ConstVars.STARTING, true, ConstVars.SERVERRUNNING,
                         StatusMapUtil::statusCheckAndUpdateStarted, sessionName, mapName);
 
@@ -47,15 +45,11 @@ public class ScriptRunner extends Thread {
     public String createMapAndStartServer(BaseScript script, String sessionName, String mapName) {
         this.bScript = script;
 
-        if (scriptInfo.isRunning()) {
-            if (scriptInfo.getStatus().equals(ConstVars.SERVERUPDATING)) {
-                return ConstVars.UPDATING;
-            } else if (new DataTrawler().exchangeAndConvert() == null) {
-                return ConstVars.STARTING;
-            }
-            return ConstVars.PREVIOUSINSTANCE;
+        if (StatusLock.isRunning()) {
+            return StatusLock.getStatusMsg();
         }
 
+        StatusLock.setStatusEnum(StatusEnum.CREATING, sessionName, mapName);
         String retval = runBasicScript(script.getCreateScript(), ConstVars.STARTING, true, ConstVars.SERVERRUNNING,
                         StatusMapUtil::statusCheckAndUpdateCreated, sessionName, mapName);
 
@@ -63,10 +57,11 @@ public class ScriptRunner extends Thread {
     }
 
     public String stopServer(BaseScript script) {
-        if (!scriptInfo.isRunning()) {
-            return ConstVars.NOINSTANCE;
+        if (!StatusLock.isRunning()) {
+            return StatusLock.getStatusMsg();
         }
 
+        StatusLock.setStatusEnum(StatusEnum.STOPPING);
         // TODO check if people are in the game
         String retval = runBasicScript(script.getStopScript(), ConstVars.STOPPED, false, ConstVars.EMPTY,
                         StatusMapUtil::statusCheckAndUpdateStopped);
@@ -75,10 +70,11 @@ public class ScriptRunner extends Thread {
     }
 
     public String saveAndExportServer(BaseScript script) {
-        if (!scriptInfo.isRunning()) {
-            return ConstVars.NOINSTANCE;
+        if (!StatusLock.isRunning()) {
+            return StatusLock.getStatusMsg();
         }
 
+        StatusLock.setStatusEnum(StatusEnum.SAVING, StatusLock.getSessionName(), StatusLock.getMapName());
         String retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVERRUNNING,
                         StatusMapUtil::statusCheckAndUpdateSaved);
 
@@ -88,54 +84,16 @@ public class ScriptRunner extends Thread {
     public String updateServer(BaseScript script) {
         this.bScript = script;
 
-        if (scriptInfo.isRunning()) {
-            if (scriptInfo.getStatus().equals(ConstVars.SERVERUPDATING)) {
-                return ConstVars.UPDATING;
-            }
-            return ConstVars.GAMERUNNING;
+        if (StatusLock.isRunning()) {
+            return StatusLock.getStatusMsg();
         }
 
+        StatusLock.setStatusEnum(StatusEnum.UPDATING);
         String retval = runBasicScript(script.getUpdateScript(), ConstVars.UPDATED, true, ConstVars.SERVERUPDATING,
                         StatusMapUtil::statusCheckAndUpdateUpdatedServer);
 
         return retval;
     }
-    //
-    // public String runBasicScript(String scriptFunction, String successString, Boolean isRunning,
-    // String status,
-    // String... args) {
-    // // NOTE: READ OUTPUT ASYNC
-    // // https://stackoverflow.com/questions/30725175/java-read-process-output-when-its-finished
-    // String retval = successString;
-    // List<String> processBuilderArgsList = new ArrayList<>();
-    // processBuilderArgsList.add(scriptFunction);
-    // processBuilderArgsList.addAll(Arrays.asList(args));
-    //
-    // // ProcessBuilder pb = new ProcessBuilder("myshellScript.sh", "myArg1",
-    // // "myArg2");
-    // // create builder
-    // ProcessBuilder pb =
-    // new ProcessBuilder(processBuilderArgsList.toArray(new
-    // String[processBuilderArgsList.size()]));
-    //
-    // // set running directory
-    // pb.directory(new File(ConstVars.SCRIPTDIR));
-    // pb.inheritIO();
-    // // start process
-    // try {
-    // System.out.println("Executing: " + pb.command());
-    // scriptInfo.setArkServer(pb.start());
-    // setStatus(isRunning, status);
-    // } catch (IOException e) {
-    // System.out.println("something broke");
-    // e.printStackTrace();
-    // retval = ConstVars.FAIL;
-    // }
-    //
-    // System.out.println("just before returning...");
-    // // new StatusThread(script).start();
-    // return retval;
-    // }
 
     @SuppressWarnings("resource")
     public String runBasicScript(String scriptFunction, String successString, Boolean isRunning, String status,
@@ -168,9 +126,6 @@ public class ScriptRunner extends Thread {
                     while ((line = reader.readLine()) != null) {
                         System.out.println(line);
                         statusMethod.apply(line, args);
-                        // if (StringUtils.equalsIgnoreCase(line, "Hello World")) {
-                        // System.out.println("BACON");
-                        // }
                     }
                 } catch (IOException ex) {
                     // TODO: stub out
