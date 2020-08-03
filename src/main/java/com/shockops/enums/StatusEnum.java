@@ -11,7 +11,7 @@ public enum StatusEnum {
     SAVING("SAVING Session: {0}, map: {1}...", true),
     SAVED("", false),
     STOPPING("STOPPING: Session Session: {0}, map: {1}", true),
-    STOPPED("Session: {0}, map: {1} STOPPED", false),
+    STOPPED("Session: {0}, map: {1} STOPPED. Exporting map data...", false),
     UPDATING("UPDATING SERVER...", true),
     UPDATED("Server is now UPDATED!", false),
     CONFIG_SAVING("SAVING CONFIG", true),

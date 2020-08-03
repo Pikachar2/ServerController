@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +16,8 @@ import com.shockops.beans.ArkData;
 import com.shockops.beans.BaseScript;
 import com.shockops.beans.ScriptInfo;
 import com.shockops.common.ConstVars;
+import com.shockops.types.MultiArgFunction;
+import com.shockops.util.StatusMapUtil;
 
 @Service
 public class ScriptRunner extends Thread {
@@ -38,7 +39,7 @@ public class ScriptRunner extends Thread {
         }
 
         String retval = runBasicScript(script.getStartScript(), ConstVars.STARTING, true, ConstVars.SERVERRUNNING,
-                        sessionName, mapName);
+                        StatusMapUtil::statusCheckAndUpdateStarted, sessionName, mapName);
 
         return retval;
     }
@@ -56,7 +57,7 @@ public class ScriptRunner extends Thread {
         }
 
         String retval = runBasicScript(script.getCreateScript(), ConstVars.STARTING, true, ConstVars.SERVERRUNNING,
-                        sessionName, mapName);
+                        StatusMapUtil::statusCheckAndUpdateCreated, sessionName, mapName);
 
         return retval;
     }
@@ -67,7 +68,8 @@ public class ScriptRunner extends Thread {
         }
 
         // TODO check if people are in the game
-        String retval = runBasicScript(script.getStopScript(), ConstVars.STOPPED, false, ConstVars.EMPTY);
+        String retval = runBasicScript(script.getStopScript(), ConstVars.STOPPED, false, ConstVars.EMPTY,
+                        StatusMapUtil::statusCheckAndUpdateStopped);
 
         return retval;
     }
@@ -77,7 +79,8 @@ public class ScriptRunner extends Thread {
             return ConstVars.NOINSTANCE;
         }
 
-        String retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVERRUNNING);
+        String retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVERRUNNING,
+                        StatusMapUtil::statusCheckAndUpdateSaved);
 
         return retval;
     }
@@ -92,7 +95,8 @@ public class ScriptRunner extends Thread {
             return ConstVars.GAMERUNNING;
         }
 
-        String retval = runBasicScript(script.getUpdateScript(), ConstVars.UPDATED, true, ConstVars.SERVERUPDATING);
+        String retval = runBasicScript(script.getUpdateScript(), ConstVars.UPDATED, true, ConstVars.SERVERUPDATING,
+                        StatusMapUtil::statusCheckAndUpdateUpdatedServer);
 
         return retval;
     }
@@ -133,8 +137,9 @@ public class ScriptRunner extends Thread {
     // return retval;
     // }
 
+    @SuppressWarnings("resource")
     public String runBasicScript(String scriptFunction, String successString, Boolean isRunning, String status,
-                    String... args) {
+                    MultiArgFunction<String> statusMethod, String... args) {
         // NOTE: READ OUTPUT ASYNC
         // https://stackoverflow.com/questions/30725175/java-read-process-output-when-its-finished
         String retval = successString;
@@ -162,9 +167,10 @@ public class ScriptRunner extends Thread {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         System.out.println(line);
-                        if (StringUtils.equalsIgnoreCase(line, "Hello World")) {
-                            System.out.println("BACON");
-                        }
+                        statusMethod.apply(line, args);
+                        // if (StringUtils.equalsIgnoreCase(line, "Hello World")) {
+                        // System.out.println("BACON");
+                        // }
                     }
                 } catch (IOException ex) {
                     // TODO: stub out
