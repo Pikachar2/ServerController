@@ -208,7 +208,7 @@ public class ArkService {
             ex.printStackTrace();
             StatusLock.setStatusEnum(StatusEnum.OFFLINE);
         }
-        StatusLock.setStatusEnum(StatusEnum.CONFIG_SAVED);
+        StatusLock.setStatusEnum(StatusEnum.OFFLINE);
         return "Config Saved!";
     }
 
