@@ -42,7 +42,7 @@ public class StatusMapUtil {
     public static void statusCheckAndUpdateUpdatedServer(String line, String... args) {
         // If matches script text
         if (StringUtils.contains(line, "Update is finished!")) {
-            StatusLock.setStatusEnum(StatusEnum.UPDATED, args);
+            StatusLock.setStatusEnum(StatusEnum.OFFLINE, args);
         } else if (StringUtils.contains(line, "Server is started!! Shutdown server then update.")) {
             StatusLock.setStatusEnum(StatusEnum.SPINNING_UP, args);
         }
