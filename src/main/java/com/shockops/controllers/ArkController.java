@@ -1,5 +1,6 @@
 package com.shockops.controllers;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,10 @@ public class ArkController {
     @Autowired
     private ArkService arkService;
 
-    @GetMapping(value = "/start/{sessionName}")
-    public TransferInfo startArkServer(@PathVariable(value = "sessionName") String sessionName) {
-        return arkService.startArkServer(sessionName);
+    @GetMapping(value = "/start/{sessionName}/{mapName}")
+    public TransferInfo startArkServer(@PathVariable(value = "sessionName") String sessionName,
+                    @PathVariable(value = "mapName") String mapName) {
+        return arkService.startArkServer(sessionName, mapName);
     }
 
     @GetMapping(value = "/createmap/{sessionName}/{mapName}")
@@ -59,13 +61,21 @@ public class ArkController {
         return arkService.getSessions();
     }
 
-    @GetMapping("/config/{sessionName}")
-    public ArkConfigResponse getConfig(@PathVariable(value = "sessionName") String sessionName) {
-        return arkService.getConfig(sessionName);
+    @GetMapping("/config/{sessionName}/{configFileName}")
+    public ArkConfigResponse getConfig(@PathVariable(value = "sessionName") String sessionName,
+                    @PathVariable(value = "configFileName") String configFileName) {
+        return arkService.getConfig(sessionName, configFileName);
     }
 
-    @PostMapping("/config/{sessionName}")
-    public String saveConfig(@RequestBody String configData, @PathVariable(value = "sessionName") String sessionName) {
-        return arkService.saveConfig(sessionName, configData);
+    @PostMapping("/config/{sessionName}/{configFileName}")
+    public String saveConfig(@RequestBody String configData, @PathVariable(value = "sessionName") String sessionName,
+                    @PathVariable(value = "configFileName") String configFileName) {
+        return arkService.saveConfig(sessionName, configData, configFileName);
     }
+
+    @GetMapping("/maps")
+    public List<String> getMaps() {
+        return arkService.getMaps();
+    }
+
 }
