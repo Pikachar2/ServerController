@@ -224,4 +224,10 @@ public class ArkService {
         }
         return maps;
     }
+
+    public String kickPlayer(String playerId) {
+        ArkScript script = new ArkScript();
+        TransferInfo retval = new TransferInfo(scriptRunner.kickPlayer(script, playerId));
+        return retval.getStatus();
+    }
 }

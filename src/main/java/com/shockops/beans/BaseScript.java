@@ -8,9 +8,10 @@ public class BaseScript {
     private String scriptDirectory;
     private String createScript;
     private String saveScript;
+    private String kickScript;
 
     public BaseScript(String startScript, String stopScript, String updateScript, String scriptDirectory,
-                    String createScript, String saveScript) {
+                    String createScript, String saveScript, String kickScript) {
         super();
         this.startScript = startScript;
         this.stopScript = stopScript;
@@ -18,6 +19,15 @@ public class BaseScript {
         this.scriptDirectory = scriptDirectory;
         this.createScript = createScript;
         this.saveScript = saveScript;
+        this.kickScript = kickScript;
+    }
+
+    public String getKickScript() {
+        return this.kickScript;
+    }
+
+    public void setKickScript(String kickScript) {
+        this.kickScript = kickScript;
     }
 
     public String getScriptDirectory() {

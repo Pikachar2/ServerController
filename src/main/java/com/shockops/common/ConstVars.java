@@ -14,6 +14,7 @@ public final class ConstVars {
     public static final String ARKUPDATESCRIPT = ARKSCRIPTDIR + "/arkUpdate.sh";
     public static final String ARKCREATESCRIPT = ARKSCRIPTDIR + "/arkCreateMap.sh";
     public static final String ARKSAVESCRIPT = ARKSCRIPTDIR + "/arkSaveExport.sh";
+    public static final String ARKKICKSCRIPT = ARKSCRIPTDIR + "/arkKickPlayer.sh";
     public static final String ARK_MAP_FILE = ARKSCRIPTDIR + "/MapNames.txt";
 
     // SPECIFICS
@@ -32,6 +33,7 @@ public final class ConstVars {
     public static final String UPDATED = "UPDATED";
     public static final String NOINSTANCE = "NO-INSTANCE";
     public static final String SAVED = "SAVED";
+    public static final String KICKED = "KICKED";
 
     // URLs
     public static final String ARKSERVERS_API_QUERY_URL = "https://arkservers.net/api/query/";
