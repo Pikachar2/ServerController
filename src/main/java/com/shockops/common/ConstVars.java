@@ -15,6 +15,7 @@ public final class ConstVars {
     public static final String ARKCREATESCRIPT = ARKSCRIPTDIR + "/arkCreateMap.sh";
     public static final String ARKSAVESCRIPT = ARKSCRIPTDIR + "/arkSaveExport.sh";
     public static final String ARKKICKSCRIPT = ARKSCRIPTDIR + "/arkKickPlayer.sh";
+    // public static final String ARKKICKSCRIPT = ARKSCRIPTDIR + "/arkKickPlayer.bat";
     public static final String ARK_MAP_FILE = ARKSCRIPTDIR + "/MapNames.txt";
 
     // SPECIFICS

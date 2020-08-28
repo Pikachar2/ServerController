@@ -79,7 +79,7 @@ public class ArkController {
     }
 
     @GetMapping("/kick/{playerId}")
-    public String kickPlayer(@PathVariable(value = "playerId") String playerId) {
+    public TransferInfo kickPlayer(@PathVariable(value = "playerId") String playerId) {
         return arkService.kickPlayer(playerId);
     }
 

@@ -142,7 +142,7 @@ public class ArkService {
         // get list of sessions
         // NOTE: Test local on "C:\\"
         // Set<String> sessions = commandLineService.listDirectoriesUsingJavaIO("C:\\");
-        Set<String> sessions = commandLineService.listDirectoriesUsingJavaIO(ConstVars.ARK_SAVED_MAPS_DIR);
+        List<String> sessions = commandLineService.listDirectoriesUsingJavaIO(ConstVars.ARK_SAVED_MAPS_DIR);
 
         // File filter
         Predicate<? super File> filter = (file -> {
@@ -160,11 +160,11 @@ public class ArkService {
             // String sessionSaveDir =
             // "F:\\Program
             // Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\SavedArks";
-            Set<String> mapList = commandLineService.listFilesUsingJavaIOWithFilter(sessionSaveDir, filter);
+            List<String> mapList = commandLineService.listFilesUsingJavaIOWithFilter(sessionSaveDir, filter);
 
             // Drop the file extension
             mapList = mapList.stream().map(s -> s.endsWith(".ark") ? s.substring(0, s.length() - 4) : s)
-                            .collect(Collectors.toSet());
+                            .collect(Collectors.toList());
 
             ArkSession arkSession = new ArkSession(session, mapList);
             arkSessions.add(arkSession);
@@ -225,9 +225,9 @@ public class ArkService {
         return maps;
     }
 
-    public String kickPlayer(String playerId) {
+    public TransferInfo kickPlayer(String playerId) {
         ArkScript script = new ArkScript();
         TransferInfo retval = new TransferInfo(scriptRunner.kickPlayer(script, playerId));
-        return retval.getStatus();
+        return retval;
     }
 }
