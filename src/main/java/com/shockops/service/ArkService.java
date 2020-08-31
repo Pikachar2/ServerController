@@ -80,12 +80,12 @@ public class ArkService {
             case STARTING_SCRIPT:
             case SPINNING_UP:
             case CREATING:
-            case CREATED:
                 if (!isFullyOnline) {
                     return StatusLock.getStatusMsg();
                 }
                 StatusLock.setStatusEnum(StatusEnum.STARTED, StatusLock.getSessionName(), StatusLock.getMapName());
                 break;
+            case CREATED:
             case STARTED:
                 if (!isFullyOnline) {
                     StatusLock.setStatusEnum(StatusEnum.OFFLINE);
