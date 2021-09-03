@@ -23,11 +23,11 @@ else
 	#Add session to GameUserSettings.ini
 	sessionName="SessionName=$1"
 	templateHome="/home/zach/Scripts/ArkScripts/Template"
-	newHome="/home/zach/Servers/Ark_Server/ShooterGame/SavedMaps"
+	newHome="/home/zach/Servers/Ark_Server/ShooterGame/SavedMaps/$1"
 	GUSiniNew="$newHome/Saved/Config/LinuxServer/GameUserSettings.ini"
 
 
-	cp -r "$templateHome/Mods" "$newHome/Mods"
+#	cp -r "$templateHome/Mods" "$newHome/Mods"
 	cp -r "$templateHome/Saved" "$newHome/Saved"
 
 	#add sessionName to GameUserSettings.ini
@@ -36,4 +36,5 @@ else
 	echo -e "\e[42m Session Created! \e[0m"
 	exit 0; #not sure if this is needed
 fi
+
 
