@@ -33,15 +33,8 @@ public class DataTrawler {
         super();
         this.data = new ArkData();
         url = PropertyConfiguration.ARKSERVERS_API_QUERY_URL;
-        System.out.println("Trawler-URL: " + url);
         this.restTemplate = new RestTemplate();
         initEntity();
-    }
-
-    // @PostConstruct
-    public void setup() {
-        url = PropertyConfiguration.ARKSERVERS_API_QUERY_URL;
-        System.out.println("Trawler-URL POSTCONSTRUCT: " + url);
     }
 
     public DataTrawler(String json) {
