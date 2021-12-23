@@ -15,7 +15,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shockops.beans.ArkData;
-import com.shockops.common.ConstVars;
+import com.shockops.config.PropertyConfiguration;
 
 @Service
 public class DataTrawler {
@@ -29,7 +29,7 @@ public class DataTrawler {
     public DataTrawler() {
         super();
         this.data = new ArkData();
-        this.url = ConstVars.ARKSERVERS_API_QUERY_URL;
+        this.url = PropertyConfiguration.ARKSERVERS_API_QUERY_URL;
         this.restTemplate = new RestTemplate();
         initEntity();
     }

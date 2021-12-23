@@ -26,6 +26,7 @@ import com.shockops.beans.ScriptInfo;
 import com.shockops.beans.TransferInfo;
 import com.shockops.common.ConstVars;
 import com.shockops.common.StatusLock;
+import com.shockops.config.PropertyConfiguration;
 import com.shockops.dto.ArkConfigResponse;
 import com.shockops.dto.ArkStatusResponse;
 import com.shockops.enums.StatusEnum;
@@ -142,7 +143,7 @@ public class ArkService {
         // get list of sessions
         // NOTE: Test local on "C:\\"
         // Set<String> sessions = commandLineService.listDirectoriesUsingJavaIO("C:\\");
-        Set<String> sessions = commandLineService.listDirectoriesUsingJavaIO(ConstVars.ARK_SAVED_MAPS_DIR);
+        Set<String> sessions = commandLineService.listDirectoriesUsingJavaIO(PropertyConfiguration.ARK_SAVED_MAPS_DIR);
 
         // File filter
         Predicate<? super File> filter = (file -> {
@@ -156,7 +157,7 @@ public class ArkService {
         // Retrieve map names for each session
         for (String session : sessions) {
             // NOTE: Test local on SavedArks Folder
-            String sessionSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + session + "/Saved/SavedArks";
+            String sessionSaveDir = PropertyConfiguration.ARK_SAVED_MAPS_DIR + "/" + session + "/Saved/SavedArks";
             // String sessionSaveDir =
             // "F:\\Program
             // Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\SavedArks";
@@ -177,7 +178,8 @@ public class ArkService {
         // String configSaveDir =
         // "F:\\Program
         // Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\Config\\WindowsServer\\";
-        String configSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + sessionName + "/Saved/Config/LinuxServer/";
+        String configSaveDir =
+                        PropertyConfiguration.ARK_SAVED_MAPS_DIR + "/" + sessionName + "/Saved/Config/LinuxServer/";
         String configData = "";
         // configFileName += ".ini";
 
@@ -194,7 +196,8 @@ public class ArkService {
         // String configSaveDir =
         // "F:\\Program
         // Files\\SteamLibrary\\steamapps\\common\\ARK\\ShooterGame\\Saved\\Config\\WindowsServer\\";
-        String configSaveDir = ConstVars.ARK_SAVED_MAPS_DIR + "/" + sessionName + "/Saved/Config/LinuxServer/";
+        String configSaveDir =
+                        PropertyConfiguration.ARK_SAVED_MAPS_DIR + "/" + sessionName + "/Saved/Config/LinuxServer/";
 
         // check if status allowed
         if (StatusLock.isRunning()) {
@@ -217,7 +220,7 @@ public class ArkService {
         try {
             // List<String> allLines =
             // Files.readAllLines(Paths.get("C:\\Users\\highi\\Desktop\\MapNames.txt"));
-            List<String> allLines = Files.readAllLines(Paths.get(ConstVars.ARK_MAP_FILE));
+            List<String> allLines = Files.readAllLines(Paths.get(PropertyConfiguration.ARK_MAP_FILE));
             maps.addAll(allLines);
         } catch (IOException e) {
             e.printStackTrace();

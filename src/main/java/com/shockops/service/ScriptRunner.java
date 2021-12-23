@@ -17,6 +17,7 @@ import com.shockops.beans.BaseScript;
 import com.shockops.beans.ScriptInfo;
 import com.shockops.common.ConstVars;
 import com.shockops.common.StatusLock;
+import com.shockops.config.PropertyConfiguration;
 import com.shockops.enums.StatusEnum;
 import com.shockops.types.MultiArgFunction;
 import com.shockops.util.StatusMapUtil;
@@ -112,7 +113,7 @@ public class ScriptRunner extends Thread {
                         new ProcessBuilder(processBuilderArgsList.toArray(new String[processBuilderArgsList.size()]));
 
         // set running directory
-        pb.directory(new File(ConstVars.SCRIPTDIR));
+        pb.directory(new File(PropertyConfiguration.SCRIPTDIR));
         // pb.inheritIO();
         // start process
         try {

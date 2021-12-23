@@ -1,0 +1,6 @@
+ARK_SAVED_MAPS_DIR=/home/zach/Servers/Ark_Server/ShotterGame/SavedMaps
+ARK_WORK_DIR=/home/zach/Scripts/ArkScripts
+ARKSERVERS_API_QUERY_URL=https://arkservers.net/api/query/
+IP_CHECK_ADDRESS=http://checkip.amazonaws.com/
+SCRIPT_DIR=/home/zach/Scripts
+THIS_SERVER_PORT=:27015
