@@ -3,6 +3,7 @@ package com.shockops.service;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,9 +20,11 @@ import com.shockops.config.PropertyConfiguration;
 
 @Service
 public class DataTrawler {
+    @Autowired
+    PropertyConfiguration propertyConfiguration;
 
     private ArkData data;
-    private String url;
+    private static String url;
     private HttpHeaders headers;
     RestTemplate restTemplate;
     HttpEntity<String> entity;
@@ -29,9 +32,16 @@ public class DataTrawler {
     public DataTrawler() {
         super();
         this.data = new ArkData();
-        this.url = PropertyConfiguration.ARKSERVERS_API_QUERY_URL;
+        url = PropertyConfiguration.ARKSERVERS_API_QUERY_URL;
+        System.out.println("Trawler-URL: " + url);
         this.restTemplate = new RestTemplate();
         initEntity();
+    }
+
+    // @PostConstruct
+    public void setup() {
+        url = PropertyConfiguration.ARKSERVERS_API_QUERY_URL;
+        System.out.println("Trawler-URL POSTCONSTRUCT: " + url);
     }
 
     public DataTrawler(String json) {
@@ -55,7 +65,8 @@ public class DataTrawler {
     }
 
     private String executeExchange() {
-        String completeUrl = this.url + IPAddressService.MY_IP;
+        String completeUrl = url + IPAddressService.MY_IP;
+        System.out.println("Trawler-URL executeExchange: " + url);
 
         ResponseEntity<String> res = restTemplate.exchange(completeUrl, HttpMethod.GET, entity, String.class);
         String responseBody = res.getBody().toString();
@@ -101,7 +112,7 @@ public class DataTrawler {
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        DataTrawler.url = url;
     }
 
     public HttpHeaders getHeaders() {

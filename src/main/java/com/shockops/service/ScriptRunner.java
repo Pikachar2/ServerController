@@ -26,6 +26,9 @@ import com.shockops.util.StatusMapUtil;
 public class ScriptRunner extends Thread {
 
     @Autowired
+    PropertyConfiguration propertyConfiguration;
+
+    @Autowired
     private ScriptInfo scriptInfo;
     private BaseScript bScript;
 

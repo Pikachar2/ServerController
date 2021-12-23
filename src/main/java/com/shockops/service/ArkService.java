@@ -47,6 +47,9 @@ public class ArkService {
     @Autowired
     private CommandLineService commandLineService;
 
+    @Autowired
+    PropertyConfiguration propertyConfiguration;
+
     public ArkStatusResponse getServerStatus() {
         // TODO need to check arkServers to see if arkserver is actually up and
         // running.
