@@ -11,6 +11,8 @@ export RCON_PORT=27020
 
 export RCON_HOME=/usr/bin/rcon
 
+export CATALINA_HOME=/usr/share/tomcat9
+export CATALINA_BASE=/var/lib/tomcat9
 
 ### ---- Aliases -----
 alias bp='nano ~/.bash_profile;'
