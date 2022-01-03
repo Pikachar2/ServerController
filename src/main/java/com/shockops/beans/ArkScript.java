@@ -1,13 +1,13 @@
 package com.shockops.beans;
 
-import com.shockops.config.PropertyConfiguration;
+import com.shockops.config.EnvironmentProperties;
 
 public class ArkScript extends BaseScript {
 
     public ArkScript() {
-        super(PropertyConfiguration.ARKSTARTSCRIPT, PropertyConfiguration.ARKSTOPSCRIPT,
-                        PropertyConfiguration.ARKUPDATESCRIPT, PropertyConfiguration.ARKSCRIPTDIR,
-                        PropertyConfiguration.ARKCREATESCRIPT, PropertyConfiguration.ARKSAVESCRIPT);
+        super(EnvironmentProperties.ARKSTARTSCRIPT, EnvironmentProperties.ARKSTOPSCRIPT,
+                        EnvironmentProperties.ARKUPDATESCRIPT, EnvironmentProperties.ARKSCRIPTDIR,
+                        EnvironmentProperties.ARKCREATESCRIPT, EnvironmentProperties.ARKSAVESCRIPT);
     }
 
 }

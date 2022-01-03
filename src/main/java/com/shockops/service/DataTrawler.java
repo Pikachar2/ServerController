@@ -16,12 +16,12 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shockops.beans.ArkData;
-import com.shockops.config.PropertyConfiguration;
+import com.shockops.config.EnvironmentProperties;
 
 @Service
 public class DataTrawler {
     @Autowired
-    PropertyConfiguration propertyConfiguration;
+    EnvironmentProperties propertyConfiguration;
 
     private ArkData data;
     private static String url;
@@ -32,9 +32,16 @@ public class DataTrawler {
     public DataTrawler() {
         super();
         this.data = new ArkData();
-        url = PropertyConfiguration.ARKSERVERS_API_QUERY_URL;
+        url = EnvironmentProperties.ARKSERVERS_API_QUERY_URL;
+        System.out.println("Trawler-URL: " + url);
         this.restTemplate = new RestTemplate();
         initEntity();
+    }
+
+    // @PostConstruct
+    public void setup() {
+        url = EnvironmentProperties.ARKSERVERS_API_QUERY_URL;
+        System.out.println("Trawler-URL POSTCONSTRUCT: " + url);
     }
 
     public DataTrawler(String json) {
@@ -59,7 +66,7 @@ public class DataTrawler {
 
     private String executeExchange() {
         String completeUrl = url + IPAddressService.MY_IP;
-        System.out.println("Trawler-URL executeExchange: " + url);
+        // System.out.println("Trawler-URL executeExchange: " + url);
 
         ResponseEntity<String> res = restTemplate.exchange(completeUrl, HttpMethod.GET, entity, String.class);
         String responseBody = res.getBody().toString();
