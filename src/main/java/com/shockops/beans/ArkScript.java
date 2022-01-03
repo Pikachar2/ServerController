@@ -7,7 +7,8 @@ public class ArkScript extends BaseScript {
     public ArkScript() {
         super(EnvironmentProperties.ARKSTARTSCRIPT, EnvironmentProperties.ARKSTOPSCRIPT,
                         EnvironmentProperties.ARKUPDATESCRIPT, EnvironmentProperties.ARKSCRIPTDIR,
-                        EnvironmentProperties.ARKCREATESCRIPT, EnvironmentProperties.ARKSAVESCRIPT);
+                        EnvironmentProperties.ARKCREATESCRIPT, EnvironmentProperties.ARKSAVESCRIPT,
+                        EnvironmentProperties.ARKKICKSCRIPT);
     }
 
 }

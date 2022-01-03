@@ -99,6 +99,16 @@ public class ScriptRunner extends Thread {
         return retval;
     }
 
+    public String kickPlayer(BaseScript script, String playerId) {
+        if (!StatusLock.isRunning()) {
+            return StatusLock.getStatusMsg();
+        }
+
+        String retval = runBasicScript(script.getKickScript(), ConstVars.KICKED, true, ConstVars.SERVERRUNNING,
+                        StatusMapUtil::statusCheckAndUpdateKicked, playerId);
+        return retval;
+    }
+
     @SuppressWarnings("resource")
     public String runBasicScript(String scriptFunction, String successString, Boolean isRunning, String status,
                     MultiArgFunction<String> statusMethod, String... args) {

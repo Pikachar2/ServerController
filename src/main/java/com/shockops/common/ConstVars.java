@@ -18,6 +18,7 @@ public final class ConstVars {
     public static final String UPDATED = "UPDATED";
     public static final String NOINSTANCE = "NO-INSTANCE";
     public static final String SAVED = "SAVED";
+    public static final String KICKED = "KICKED";
 
     // REGEX
     public static final String ARK_DATE_FILENAME_REGEX =
