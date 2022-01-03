@@ -22,6 +22,7 @@ public class CommandLineService {
     }
 
     public Set<String> listDirectoriesUsingJavaIO(String dir) {
+        System.out.println("CMDLINE DIR: " + dir);
         return Stream.of(new File(dir).listFiles()).filter(file -> file.isDirectory()).map(File::getName)
                         .collect(Collectors.toSet());
     }
