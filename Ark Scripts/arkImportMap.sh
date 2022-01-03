@@ -30,15 +30,20 @@ else
 
 	#restore maps
 	cd "$baseDir"
-	#remove old data
-	rm -rf Saved
-	rm -rf Content/Mods
 
-	#restore maps
-	cp -r "$saveDir"/Mods "$baseDir/Content"
-	cp -r "$saveDir"/Saved "$baseDir"
+	#remove old data
+	if [ ! -d "$baseDir/Saved" ]; then
+		rm Saved
+	fi
+	if [ ! -d "$baseDir/Content/Mods" ]; then
+		rm Content/Mods
+	fi
+
+	#load maps
+	ln -s "$saveDir"/Mods "Content/Mods"
+	ln -s "$saveDir"/Saved "Saved"
+
 	echo -e "\e[42m Map loaded! \e[0m"
 	exit 0; #not sure if this is needed
 fi
-
 

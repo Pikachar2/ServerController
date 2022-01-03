@@ -16,10 +16,8 @@ public class StatusMapUtil {
 
     public static void statusCheckAndUpdateCreated(String line, String... args) {
         // If matches script text
-        if (StringUtils.contains(line, "Map Saved!")) {
+        if (StringUtils.contains(line, "Session Created!")) {
             StatusLock.setStatusEnum(StatusEnum.CREATED, args);
-        } else if (StringUtils.contains(line, "Server Started!")) {
-            StatusLock.setStatusEnum(StatusEnum.SPINNING_UP, args);
         }
     }
 
@@ -28,7 +26,7 @@ public class StatusMapUtil {
         if (StringUtils.contains(line, "Map Saved!")) {
             StatusLock.setStatusEnum(StatusEnum.OFFLINE, args);
         } else if (StringUtils.contains(line, "Server is now stopped.")) {
-            StatusLock.setStatusEnum(StatusEnum.STOPPED_AND_EXPORTING, args);
+            StatusLock.setStatusEnum(StatusEnum.OFFLINE, args);
         }
     }
 
