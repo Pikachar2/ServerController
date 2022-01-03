@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Set;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -17,13 +17,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommandLineService {
 
-    public Set<String> listFilesUsingJavaIOWithFilter(String dir, Predicate<? super File> filter) {
-        return Stream.of(new File(dir).listFiles()).filter(filter).map(File::getName).collect(Collectors.toSet());
+    public List<String> listFilesUsingJavaIOWithFilter(String dir, Predicate<? super File> filter) {
+        return Stream.of(new File(dir).listFiles()).filter(filter).map(File::getName).collect(Collectors.toList());
     }
 
-    public Set<String> listDirectoriesUsingJavaIO(String dir) {
+    public List<String> listDirectoriesUsingJavaIO(String dir) {
         return Stream.of(new File(dir).listFiles()).filter(file -> file.isDirectory()).map(File::getName)
-                        .collect(Collectors.toSet());
+                        .collect(Collectors.toList());
     }
 
     /*

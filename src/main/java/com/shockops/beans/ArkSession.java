@@ -1,17 +1,17 @@
 package com.shockops.beans;
 
-import java.util.Set;
+import java.util.List;
 
 public class ArkSession {
 
     String sessionName;
-    Set<String> mapNames;
+    List<String> mapNames;
 
     public ArkSession() {
         super();
     }
 
-    public ArkSession(String sessionName, Set<String> mapNames) {
+    public ArkSession(String sessionName, List<String> mapNames) {
         super();
         this.sessionName = sessionName;
         this.mapNames = mapNames;
@@ -25,11 +25,11 @@ public class ArkSession {
         this.sessionName = sessionName;
     }
 
-    public Set<String> getMapNames() {
+    public List<String> getMapNames() {
         return this.mapNames;
     }
 
-    public void setMapNames(Set<String> mapNames) {
+    public void setMapNames(List<String> mapNames) {
         this.mapNames = mapNames;
     }
 

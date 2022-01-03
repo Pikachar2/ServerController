@@ -47,4 +47,9 @@ public class StatusMapUtil {
             StatusLock.setStatusEnum(StatusEnum.SPINNING_UP, args);
         }
     }
+
+    public static void statusCheckAndUpdateKicked(String line, String... args) {
+        // Stub
+    }
+
 }
