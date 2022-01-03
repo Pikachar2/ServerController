@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "system.ip_check_address",
+    "type": "java.lang.String",
+    "description": "A description for 'system.ip_check_address'"
+  },
+  {
+    "name": "ark.saved_maps.dir",
+    "type": "java.lang.String",
+    "description": "A description for 'ark.saved_maps.dir'"
+  },
+  {
+    "name": "ark.work_dir",
+    "type": "java.lang.String",
+    "description": "A description for 'ark.work_dir'"
+  },
+  {
+    "name": "ark.script.script_dir",
+    "type": "java.lang.String",
+    "description": "A description for 'ark.script.script_dir'"
+  },
+  {
+    "name": "ark.server_port",
+    "type": "java.lang.String",
+    "description": "A description for 'ark.server_port'"
+  },
+  {
+    "name": "ark.arkservers_api_query_url",
+    "type": "java.lang.String",
+    "description": "A description for 'ark.arkservers_api_query_url'"
+  }
+]}
