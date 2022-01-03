@@ -24,8 +24,7 @@ public enum StatusEnum {
     private String statusMsg;
     private Boolean isInProgress = false;
 
-    private static final Set<StatusEnum> runningStatus =
-                    Stream.of(SPINNING_UP, CREATED, STARTED).collect(Collectors.toSet());
+    private static final Set<StatusEnum> runningStatus = Stream.of(SPINNING_UP, STARTED).collect(Collectors.toSet());
 
     private StatusEnum(String statusMsg, Boolean isInProgress) {
         this.statusMsg = statusMsg;

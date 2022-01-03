@@ -6,3 +6,6 @@ Aberration_P
 Extinction
 Valguero_P
 CrystalIsles
+Genesis
+Gen2
+Viking_P
