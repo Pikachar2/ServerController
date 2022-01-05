@@ -36,14 +36,14 @@ public class ArkController {
         return arkService.createMapAndStartArkServer(sessionName, mapName);
     }
 
-    @GetMapping(value = "/stop")
-    public TransferInfo stopArkServer() {
-        return arkService.stopArkServer();
+    @GetMapping(value = "/stop/{mapName}")
+    public TransferInfo stopArkServer(@PathVariable(value = "mapName") String mapName) {
+        return arkService.stopArkServer(mapName);
     }
 
-    @GetMapping(value = "/saveAndExport")
-    public TransferInfo saveAndExportArkServer() {
-        return arkService.saveAndExportArkServer();
+    @GetMapping(value = "/saveAndExport/{mapName}")
+    public TransferInfo saveAndExportArkServer(@PathVariable(value = "mapName") String mapName) {
+        return arkService.saveAndExportArkServer(mapName);
     }
 
     @GetMapping(value = "/update")

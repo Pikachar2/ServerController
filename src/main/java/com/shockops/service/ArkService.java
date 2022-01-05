@@ -74,7 +74,8 @@ public class ArkService {
         // return new ArkStatusResponse("Offline");
 
         // return new ArkStatusResponse("Online");
-        return new ArkStatusResponse(correlateStatus(isFullyOnline));
+        return new ArkStatusResponse(correlateStatus(isFullyOnline), StatusLock.getSessionName(),
+                        StatusLock.getMapNames());
     }
 
     private String correlateStatus(Boolean isFullyOnline) {
@@ -87,7 +88,7 @@ public class ArkService {
                 if (!isFullyOnline) {
                     return StatusLock.getStatusMsg();
                 }
-                StatusLock.setStatusEnum(StatusEnum.STARTED, StatusLock.getSessionName(), StatusLock.getMapName());
+                StatusLock.setStatusEnum(StatusEnum.STARTED, StatusLock.getSessionName(), StatusLock.getMapNames());
                 break;
             case CREATED:
             case STARTED:
@@ -113,16 +114,16 @@ public class ArkService {
         return retval;
     }
 
-    public TransferInfo stopArkServer() {
+    public TransferInfo stopArkServer(String mapName) {
         ArkScript script = new ArkScript();
-        TransferInfo retval = new TransferInfo(scriptRunner.stopServer(script));
+        TransferInfo retval = new TransferInfo(scriptRunner.stopServer(script, mapName));
 
         return retval;
     }
 
-    public TransferInfo saveAndExportArkServer() {
+    public TransferInfo saveAndExportArkServer(String mapName) {
         ArkScript script = new ArkScript();
-        TransferInfo retval = new TransferInfo(scriptRunner.saveAndExportServer(script));
+        TransferInfo retval = new TransferInfo(scriptRunner.saveAndExportServer(script, mapName));
 
         return retval;
     }

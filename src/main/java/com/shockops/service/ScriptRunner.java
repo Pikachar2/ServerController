@@ -60,27 +60,28 @@ public class ScriptRunner extends Thread {
         return retval;
     }
 
-    public String stopServer(BaseScript script) {
+    public String stopServer(BaseScript script, String mapName) {
         if (!StatusLock.isRunning()) {
             return StatusLock.getStatusMsg();
         }
 
-        StatusLock.setStatusEnum(StatusEnum.STOPPING);
+        StatusLock.setStatusEnum(StatusEnum.STOPPING, mapName);
         // TODO check if people are in the game
         String retval = runBasicScript(script.getStopScript(), ConstVars.STOPPED, false, ConstVars.EMPTY,
-                        StatusMapUtil::statusCheckAndUpdateStopped);
+                        StatusMapUtil::statusCheckAndUpdateStopped, mapName);
 
         return retval;
     }
 
-    public String saveAndExportServer(BaseScript script) {
+    public String saveAndExportServer(BaseScript script, String mapName) {
+        // TODO: MAPNAME STUFFS
         if (!StatusLock.isRunning()) {
             return StatusLock.getStatusMsg();
         }
 
-        StatusLock.setStatusEnum(StatusEnum.SAVING, StatusLock.getSessionName(), StatusLock.getMapName());
+        StatusLock.setStatusEnum(StatusEnum.SAVING, StatusLock.getSessionName(), StatusLock.getMapNames());
         String retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVERRUNNING,
-                        StatusMapUtil::statusCheckAndUpdateSaved);
+                        StatusMapUtil::statusCheckAndUpdateSaved, mapName);
 
         return retval;
     }
@@ -185,7 +186,8 @@ public class ScriptRunner extends Thread {
             } else if ((data.getPlayers().size() == 0) || (data.getInfo().getPlayers().length() == 0)) {
                 // if nobody is online
                 // turn off server
-                stopServer(bScript);
+                System.out.println("is this even used????? ScriptRunner");
+                stopServer(bScript, null);
                 // leave loop/join thread
                 break;
             }
