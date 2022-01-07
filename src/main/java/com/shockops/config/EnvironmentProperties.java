@@ -1,9 +1,13 @@
 package com.shockops.config;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class EnvironmentProperties {
+
+    public static final String SCRIPT_SUFFIX = getScriptSuffix();
 
     // URLs
     public static String ARKSERVERS_API_QUERY_URL;
@@ -36,15 +40,25 @@ public class EnvironmentProperties {
         ARKSCRIPTDIR = SCRIPTDIR + "/ArkScripts";
 
         // Ark Control Scripts
-        ARKSTARTSCRIPT = ARKSCRIPTDIR + "/arkStartup.sh";
-        ARKSTOPSCRIPT = ARKSCRIPTDIR + "/arkStop.sh";
-        ARKUPDATESCRIPT = ARKSCRIPTDIR + "/arkUpdate.sh";
-        ARKCREATESCRIPT = ARKSCRIPTDIR + "/arkCreateMap.sh";
-        ARKSAVESCRIPT = ARKSCRIPTDIR + "/arkSaveExport.sh";
-        ARKKICKSCRIPT = ARKSCRIPTDIR + "/arkKickPlayer.sh";
+        ARKSTARTSCRIPT = ARKSCRIPTDIR + "/arkStartup" + SCRIPT_SUFFIX;
+        ARKSTOPSCRIPT = ARKSCRIPTDIR + "/arkStop" + SCRIPT_SUFFIX;
+        ARKUPDATESCRIPT = ARKSCRIPTDIR + "/arkUpdate" + SCRIPT_SUFFIX;
+        ARKCREATESCRIPT = ARKSCRIPTDIR + "/arkCreateMap" + SCRIPT_SUFFIX;
+        ARKSAVESCRIPT = ARKSCRIPTDIR + "/arkSaveExport" + SCRIPT_SUFFIX;
+        ARKKICKSCRIPT = ARKSCRIPTDIR + "/arkKickPlayer" + SCRIPT_SUFFIX;
         ARK_MAP_FILE = ARKSCRIPTDIR + "/MapNames.txt";
 
-        System.out.println("ARK_MAP_FILE: " + ARK_MAP_FILE);
+        System.out.println("ARKSTARTSCRIPT: " + ARKSTARTSCRIPT);
+    }
+
+    private static String getScriptSuffix() {
+        String os = SystemUtils.OS_NAME;
+
+        System.out.println("Operating System: " + os);
+        if (StringUtils.contains(os, "Windows")) {
+            return ".bat";
+        }
+        return "" + SCRIPT_SUFFIX;
     }
 
 }
