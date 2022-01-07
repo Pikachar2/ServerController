@@ -35,7 +35,7 @@ public class ScriptRunner extends Thread {
     public String startServer(BaseScript script, String sessionName, String mapName) {
         this.bScript = script;
 
-        if (StatusLock.isRunning()) {
+        if (StatusLock.isInProgress()) {
             return StatusLock.getStatusMsg();
         }
 
