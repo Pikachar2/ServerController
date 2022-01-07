@@ -26,7 +26,7 @@ public class EnvironmentProperties {
     public static String ARK_CREATE_SCRIPT;
     public static String ARK_SAVE_SCRIPT;
     public static String ARK_KICK_SCRIPT;
-    // public static final String ARKKICKSCRIPT = ARKSCRIPTDIR + "/arkKickPlayer.bat";
+
     public static String ARK_MAP_FILE;
 
     public static void initEnvVars(String arkServersApiQueryUrl, String thisServerPort, String scriptDir,
