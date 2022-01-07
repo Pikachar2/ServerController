@@ -40,7 +40,7 @@ public class ScriptRunner extends Thread {
         }
 
         StatusLock.setStatusEnum(StatusEnum.STARTING_SCRIPT, sessionName, mapName);
-        String retval = runBasicScript(script.getStartScript(), ConstVars.STARTING, true, ConstVars.SERVERRUNNING,
+        String retval = runBasicScript(script.getStartScript(), ConstVars.STARTING, true, ConstVars.SERVER_RUNNING,
                         StatusMapUtil::statusCheckAndUpdateStarted, sessionName, mapName);
 
         return retval;
@@ -54,7 +54,7 @@ public class ScriptRunner extends Thread {
         }
 
         StatusLock.setStatusEnum(StatusEnum.CREATING, sessionName, mapName);
-        String retval = runBasicScript(script.getCreateScript(), ConstVars.STARTING, true, ConstVars.SERVERRUNNING,
+        String retval = runBasicScript(script.getCreateScript(), ConstVars.STARTING, true, ConstVars.SERVER_RUNNING,
                         StatusMapUtil::statusCheckAndUpdateCreated, sessionName, mapName);
 
         return retval;
@@ -80,7 +80,7 @@ public class ScriptRunner extends Thread {
         }
 
         StatusLock.setStatusEnum(StatusEnum.SAVING, StatusLock.getSessionName(), StatusLock.getMapNames());
-        String retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVERRUNNING,
+        String retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVER_RUNNING,
                         StatusMapUtil::statusCheckAndUpdateSaved, mapName);
 
         return retval;
@@ -94,7 +94,7 @@ public class ScriptRunner extends Thread {
         }
 
         StatusLock.setStatusEnum(StatusEnum.UPDATING);
-        String retval = runBasicScript(script.getUpdateScript(), ConstVars.UPDATED, true, ConstVars.SERVERUPDATING,
+        String retval = runBasicScript(script.getUpdateScript(), ConstVars.UPDATED, true, ConstVars.SERVER_UPDATING,
                         StatusMapUtil::statusCheckAndUpdateUpdatedServer);
 
         return retval;
@@ -105,7 +105,7 @@ public class ScriptRunner extends Thread {
             return StatusLock.getStatusMsg();
         }
 
-        String retval = runBasicScript(script.getKickScript(), ConstVars.KICKED, true, ConstVars.SERVERRUNNING,
+        String retval = runBasicScript(script.getKickScript(), ConstVars.KICKED, true, ConstVars.SERVER_RUNNING,
                         StatusMapUtil::statusCheckAndUpdateKicked, playerId);
         return retval;
     }
