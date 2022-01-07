@@ -127,7 +127,7 @@ public class ScriptRunner extends Thread {
                         new ProcessBuilder(processBuilderArgsList.toArray(new String[processBuilderArgsList.size()]));
 
         // set running directory
-        pb.directory(new File(EnvironmentProperties.SCRIPTDIR));
+        pb.directory(new File(EnvironmentProperties.SCRIPT_DIR));
         // pb.inheritIO();
         // start process
         try {
