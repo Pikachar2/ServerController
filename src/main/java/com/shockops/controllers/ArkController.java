@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shockops.beans.ArkSession;
 import com.shockops.beans.TransferInfo;
+import com.shockops.config.EnvironmentProperties;
 import com.shockops.dto.ArkConfigResponse;
 import com.shockops.dto.ArkStatusResponse;
 import com.shockops.service.ArkService;
@@ -81,6 +82,11 @@ public class ArkController {
     @GetMapping("/kick/{playerId}")
     public TransferInfo kickPlayer(@PathVariable(value = "playerId") String playerId) {
         return arkService.kickPlayer(playerId);
+    }
+
+    @GetMapping("/maxMapsRunning")
+    public Integer getMaxMapsRunning() {
+        return EnvironmentProperties.MAX_MAPS_RUNNING;
     }
 
 }

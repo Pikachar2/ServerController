@@ -79,7 +79,7 @@ public class ScriptRunner extends Thread {
             return StatusLock.getStatusMsg();
         }
 
-        StatusLock.setStatusEnum(StatusEnum.SAVING, StatusLock.getSessionName(), StatusLock.getMapNames());
+        StatusLock.setStatusEnum(StatusEnum.SAVING, StatusLock.getSessionName(), mapName);
         String retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVER_RUNNING,
                         StatusMapUtil::statusCheckAndUpdateSaved, mapName);
 

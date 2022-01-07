@@ -98,6 +98,7 @@ public class ArkService {
                 break;
             case OFFLINE:
                 if (isFullyOnline) {
+                    // TODO: Fix the unknown bit
                     StatusLock.setStatusEnum(StatusEnum.STARTED, "UNKNOWN", "UNKNOWN");
                 }
                 break;

@@ -1,14 +1,14 @@
 package com.shockops.dto;
 
-import java.util.List;
+import java.util.Set;
 
 public class ArkStatusResponse {
 
     private String status;
     private String currentSessionName;
-    private List<String> mapNames;
+    private Set<String> mapNames;
 
-    public ArkStatusResponse(String status, String currentSessionName, List<String> mapNames) {
+    public ArkStatusResponse(String status, String currentSessionName, Set<String> mapNames) {
         super();
         this.status = status;
         this.currentSessionName = currentSessionName;
@@ -31,7 +31,7 @@ public class ArkStatusResponse {
         return this.currentSessionName;
     }
 
-    public List<String> getMapNames() {
+    public Set<String> getMapNames() {
         return this.mapNames;
     }
 
@@ -39,7 +39,7 @@ public class ArkStatusResponse {
         this.currentSessionName = currentSessionName;
     }
 
-    public void setMapNames(List<String> mapNames) {
+    public void setMapNames(Set<String> mapNames) {
         this.mapNames = mapNames;
     }
 

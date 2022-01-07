@@ -11,7 +11,9 @@ public class EnvironmentProperties {
 
     // URLs
     public static String ARKSERVERS_API_QUERY_URL;
-    public static String THIS_SERVER_PORT;
+    public static String GAME_PORT;
+    public static String QUERY_PORT;
+    public static String RCON_PORT;
 
     // public static String SCRIPTDIR = "C:\\Users\\highi\\Desktop";
     public static String SCRIPT_DIR;
@@ -29,10 +31,14 @@ public class EnvironmentProperties {
 
     public static String ARK_MAP_FILE;
 
-    public static void initEnvVars(String arkServersApiQueryUrl, String thisServerPort, String scriptDir,
-                    String workDir, String arkSavedMapsDir) {
+    public static Integer MAX_MAPS_RUNNING;
+
+    public static void initEnvVars(String arkServersApiQueryUrl, String gamePort, String queryPort, String rconPort,
+                    String scriptDir, String workDir, String arkSavedMapsDir, Integer maxMapsRunning) {
         ARKSERVERS_API_QUERY_URL = arkServersApiQueryUrl;
-        THIS_SERVER_PORT = thisServerPort;
+        QUERY_PORT = queryPort;
+        GAME_PORT = gamePort;
+        RCON_PORT = rconPort;
 
         SCRIPT_DIR = scriptDir;
         WORK_DIR = workDir;
@@ -49,6 +55,8 @@ public class EnvironmentProperties {
         ARK_MAP_FILE = ARK_SCRIPT_DIR + "/MapNames.txt";
 
         System.out.println("ARKSTARTSCRIPT: " + ARK_START_SCRIPT);
+
+        MAX_MAPS_RUNNING = maxMapsRunning;
     }
 
     private static String getScriptSuffix() {
