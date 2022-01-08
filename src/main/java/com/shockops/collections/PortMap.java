@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.shockops.beans.PortContainer;
+
 public class PortMap {
     // Look here for what ports are for what
     // https://ark.fandom.com/wiki/Dedicated_server_setup
@@ -33,6 +35,10 @@ public class PortMap {
 
     public String getRCONPort(String mapName) {
         return rconPortMap.get(mapName);
+    }
+
+    public PortContainer getPortsByMap(String mapName) {
+        return new PortContainer(getGamePort(mapName), getQueryPort(mapName), getRCONPort(mapName));
     }
 
     public Set<String> remove(String mapName) {

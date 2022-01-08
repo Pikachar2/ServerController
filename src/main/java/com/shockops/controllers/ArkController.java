@@ -79,9 +79,10 @@ public class ArkController {
         return arkService.getMaps();
     }
 
-    @GetMapping("/kick/{playerId}")
-    public TransferInfo kickPlayer(@PathVariable(value = "playerId") String playerId) {
-        return arkService.kickPlayer(playerId);
+    @GetMapping("/kick/{playerId}/{mapName}")
+    public TransferInfo kickPlayer(@PathVariable(value = "playerId") String playerId,
+                    @PathVariable(value = "mapName") String mapName) {
+        return arkService.kickPlayer(playerId, mapName);
     }
 
     @GetMapping("/maxMapsRunning")

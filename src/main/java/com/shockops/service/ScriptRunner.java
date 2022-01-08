@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.shockops.beans.ArkData;
 import com.shockops.beans.BaseScript;
+import com.shockops.beans.PortContainer;
 import com.shockops.beans.ScriptInfo;
 import com.shockops.common.ConstVars;
 import com.shockops.common.StatusLock;
@@ -40,8 +41,10 @@ public class ScriptRunner extends Thread {
         }
 
         StatusLock.setStatusEnum(StatusEnum.STARTING_SCRIPT, sessionName, mapName);
+        PortContainer ports = StatusLock.getPortsByMapName(mapName);
         String retval = runBasicScript(script.getStartScript(), ConstVars.STARTING, true, ConstVars.SERVER_RUNNING,
-                        StatusMapUtil::statusCheckAndUpdateStarted, sessionName, mapName);
+                        StatusMapUtil::statusCheckAndUpdateStarted, sessionName, mapName, ports.getGamePort(),
+                        ports.getQueryPort(), ports.getRconPort());
 
         return retval;
     }
@@ -55,7 +58,7 @@ public class ScriptRunner extends Thread {
 
         StatusLock.setStatusEnum(StatusEnum.CREATING, sessionName, mapName);
         String retval = runBasicScript(script.getCreateScript(), ConstVars.STARTING, true, ConstVars.SERVER_RUNNING,
-                        StatusMapUtil::statusCheckAndUpdateCreated, sessionName, mapName);
+                        StatusMapUtil::statusCheckAndUpdateCreated, sessionName);
 
         return retval;
     }
@@ -67,8 +70,9 @@ public class ScriptRunner extends Thread {
 
         StatusLock.setStatusEnum(StatusEnum.STOPPING, mapName);
         // TODO check if people are in the game
+        PortContainer ports = StatusLock.getPortsByMapName(mapName);
         String retval = runBasicScript(script.getStopScript(), ConstVars.STOPPED, false, ConstVars.EMPTY,
-                        StatusMapUtil::statusCheckAndUpdateStopped, mapName);
+                        StatusMapUtil::statusCheckAndUpdateStopped, ports.getRconPort());
 
         return retval;
     }
@@ -80,8 +84,9 @@ public class ScriptRunner extends Thread {
         }
 
         StatusLock.setStatusEnum(StatusEnum.SAVING, StatusLock.getSessionName(), mapName);
+        PortContainer ports = StatusLock.getPortsByMapName(mapName);
         String retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVER_RUNNING,
-                        StatusMapUtil::statusCheckAndUpdateSaved, mapName);
+                        StatusMapUtil::statusCheckAndUpdateSaved, ports.getRconPort());
 
         return retval;
     }
@@ -100,13 +105,14 @@ public class ScriptRunner extends Thread {
         return retval;
     }
 
-    public String kickPlayer(BaseScript script, String playerId) {
+    public String kickPlayer(BaseScript script, String playerId, String mapName) {
         if (!StatusLock.isRunning()) {
             return StatusLock.getStatusMsg();
         }
 
+        PortContainer ports = StatusLock.getPortsByMapName(mapName);
         String retval = runBasicScript(script.getKickScript(), ConstVars.KICKED, true, ConstVars.SERVER_RUNNING,
-                        StatusMapUtil::statusCheckAndUpdateKicked, playerId);
+                        StatusMapUtil::statusCheckAndUpdateKicked, playerId, ports.getRconPort());
         return retval;
     }
 

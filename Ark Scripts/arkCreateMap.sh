@@ -4,7 +4,6 @@
 
 # Params
 # $1: SessionName
-# $2: MapName
 
 #if incorrect number of arguments passed
 if [ $# -ne 1 ]; then

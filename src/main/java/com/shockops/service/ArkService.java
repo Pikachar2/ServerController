@@ -233,9 +233,9 @@ public class ArkService {
         return maps;
     }
 
-    public TransferInfo kickPlayer(String playerId) {
+    public TransferInfo kickPlayer(String playerId, String mapName) {
         ArkScript script = new ArkScript();
-        TransferInfo retval = new TransferInfo(scriptRunner.kickPlayer(script, playerId));
+        TransferInfo retval = new TransferInfo(scriptRunner.kickPlayer(script, playerId, mapName));
         return retval;
     }
 }

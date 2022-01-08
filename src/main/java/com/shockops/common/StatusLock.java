@@ -21,16 +21,6 @@ public class StatusLock {
     public static void setStatusEnum(StatusEnum newStatus, String... args) {
         statusEnum = newStatus;
         statusMsg = statusEnum.assembleMessage((Object[]) args);
-        // if (ArrayUtils.isEmpty(args)) {
-        // sessionName = null;
-        // portMap.clear();
-        // } else if (args.length == 2) {
-        // sessionName = args[0];
-        // PortContainer ports = PortMapManager.getAvailablePorts(portMap);
-        // portMap.put(args[1], ports.getGamePort(), ports.getQueryPort(), ports.getRconPort());
-        // } else {
-        // portMap.remove(args[0]);
-        // }
 
         switch (newStatus) {
             case SPINNING_UP:
@@ -84,6 +74,10 @@ public class StatusLock {
 
     public static Boolean isRunning() {
         return statusEnum.isRunning();
+    }
+
+    public static PortContainer getPortsByMapName(String mapName) {
+        return portMap.getPortsByMap(mapName);
     }
 
 }
