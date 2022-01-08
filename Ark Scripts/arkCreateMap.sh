@@ -1,10 +1,13 @@
 #!/bin/bash
 #arkCreateMap.sh
 #script for correctly and safely creating a game 
-#PARAMS: sessionName=$1, mapName=$2,
+
+# Params
+# $1: SessionName
+# $2: MapName
 
 #if incorrect number of arguments passed
-if [ $# -ne 2 ]; then
+if [ $# -ne 1 ]; then
 	echo "No arguments supplied"
 	exit 1
 fi
@@ -22,8 +25,8 @@ if  (pgrep -x "ShooterGameServ"); then
 else
 	#Add session to GameUserSettings.ini
 	sessionName="SessionName=$1"
-	templateHome="/home/zach/Scripts/ArkScripts/Template"
-	newHome="/home/zach/Servers/Ark_Server/ShooterGame/SavedMaps/$1"
+	templateHome="$ARK_SCRIPT_DIR/Template"
+	newHome="$ARK_SAVED_MAPS_DIR/$1"
 	GUSiniNew="$newHome/Saved/Config/LinuxServer/GameUserSettings.ini"
 
 

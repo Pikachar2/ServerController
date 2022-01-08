@@ -1,6 +1,7 @@
 #!/bin/bash
 #arkImportMap.sh
 #script for correctly and safely importing Ark saved data 
+#PARAMS: sessionName=$1
 
 #if incorrect number of arguments passed
 if [ $# -ne 1 ]; then
@@ -20,7 +21,7 @@ if  (pgrep -x "ShooterGameServ"); then
 	echo -e "\e[41m Server running, cant setup!! \e[0m"
 else
 
-	baseDir="/home/zach/Servers/Ark_Server/ShooterGame"
+	baseDir="$ARK_SERVER_DIR/ShooterGame"
 	saveDir="$baseDir/SavedMaps/$1"
 	if [ ! -d "$saveDir" ]; then
 		#directory does not exist
