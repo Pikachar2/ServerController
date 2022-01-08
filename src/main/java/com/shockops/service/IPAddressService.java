@@ -20,7 +20,7 @@ public class IPAddressService {
     public static String MY_IP = "";
 
     public String getMyIp() {
-        System.out.println("IP_CHECK_ADDRESS: " + IP_CHECK_ADDRESS);
+        // System.out.println("IP_CHECK_ADDRESS: " + IP_CHECK_ADDRESS);
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(IP_CHECK_ADDRESS, String.class);
         String retVal = responseEntity.getBody().trim();
         MY_IP = retVal + ":" + EnvironmentProperties.QUERY_PORT;

@@ -68,9 +68,9 @@ public class ScriptRunner extends Thread {
             return StatusLock.getStatusMsg();
         }
 
+        PortContainer ports = StatusLock.getPortsByMapName(mapName);
         StatusLock.setStatusEnum(StatusEnum.STOPPING, mapName);
         // TODO check if people are in the game
-        PortContainer ports = StatusLock.getPortsByMapName(mapName);
         String retval = runBasicScript(script.getStopScript(), ConstVars.STOPPED, false, ConstVars.EMPTY,
                         StatusMapUtil::statusCheckAndUpdateStopped, ports.getRconPort());
 

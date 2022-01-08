@@ -3,7 +3,10 @@ package com.shockops.service;
 import java.io.IOException;
 import java.util.Arrays;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,6 +22,7 @@ import com.shockops.beans.ArkData;
 import com.shockops.config.EnvironmentProperties;
 
 @Service
+@DependsOn({"initEnvVars"})
 public class DataTrawler {
     @Autowired
     EnvironmentProperties propertyConfiguration;
@@ -38,7 +42,7 @@ public class DataTrawler {
         initEntity();
     }
 
-    // @PostConstruct
+    @PostConstruct
     public void setup() {
         url = EnvironmentProperties.ARKSERVERS_API_QUERY_URL;
         System.out.println("Trawler-URL POSTCONSTRUCT: " + url);

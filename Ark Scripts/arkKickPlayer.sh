@@ -7,7 +7,7 @@
 # $1: PlayerId
 # $2: RCONPort
 
-rconPort=$1
+rconPort=$2
 echo $rconPort
 
 

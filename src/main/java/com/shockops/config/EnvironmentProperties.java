@@ -66,7 +66,7 @@ public class EnvironmentProperties {
         if (StringUtils.contains(os, "Windows")) {
             return ".bat";
         }
-        return "" + SCRIPT_SUFFIX;
+        return ".sh";
     }
 
 }

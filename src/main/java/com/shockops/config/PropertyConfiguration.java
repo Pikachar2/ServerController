@@ -29,8 +29,10 @@ public class PropertyConfiguration implements InitializingBean {
     @Value("${ark.max_maps_running}")
     private Integer maxMapsRunning;
 
-    @Bean
+    // @Bean
+    @Bean("initEnvVars")
     public void initEnvVars() {
+        System.out.println("PropertyConfiguration: " + arkServersApiQueryUrl);
         EnvironmentProperties.initEnvVars(arkServersApiQueryUrl, gamePort, queryPort, rconPort, scriptDir, workDir,
                         arkSavedMapsDir, maxMapsRunning);
     }
