@@ -10,8 +10,13 @@ public class PropertyConfiguration implements InitializingBean {
 
     @Value("${ark.arkservers_api_query_url:https://arkservers.net/api/query/}")
     private String arkServersApiQueryUrl;
-    @Value("${ark.server_port:27015}")
-    private String thisServerPort;
+
+    @Value("${ark.game_port}")
+    private String gamePort;
+    @Value("${ark.query_port}")
+    private String queryPort;
+    @Value("${ark.rcon.port}")
+    private String rconPort;
 
     // public static String SCRIPTDIR = "C:\\Users\\highi\\Desktop";
     @Value("${ark.script.script_dir}")
@@ -21,9 +26,15 @@ public class PropertyConfiguration implements InitializingBean {
     @Value("${ark.saved_maps.dir}")
     private String arkSavedMapsDir;
 
-    @Bean
+    @Value("${ark.max_maps_running}")
+    private Integer maxMapsRunning;
+
+    // @Bean
+    @Bean("initEnvVars")
     public void initEnvVars() {
-        EnvironmentProperties.initEnvVars(arkServersApiQueryUrl, thisServerPort, scriptDir, workDir, arkSavedMapsDir);
+        System.out.println("PropertyConfiguration: " + arkServersApiQueryUrl);
+        EnvironmentProperties.initEnvVars(arkServersApiQueryUrl, gamePort, queryPort, rconPort, scriptDir, workDir,
+                        arkSavedMapsDir, maxMapsRunning);
     }
 
     @Override

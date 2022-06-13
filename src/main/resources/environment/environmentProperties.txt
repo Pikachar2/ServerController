@@ -1,15 +1,24 @@
-export ARK_SAVED_MAPS_DIR=/home/zach/Servers/Ark_Server/ShooterGame/SavedMaps
+export ARK_SERVER_DIR=/home/zach/Servers/Ark_Server
+export ARK_SAVED_MAPS_DIR=$ARK_SERVER_DIR/ShooterGame/SavedMaps
 export ARK_WORK_DIR=/home/zach/Scripts/ArkScripts
 export ARKSERVERS_API_QUERY_URL=https://arkservers.net/api/query/
 export IP_CHECK_ADDRESS=http://checkip.amazonaws.com/
 export SCRIPT_DIR=/home/zach/Scripts
-export THIS_SERVER_PORT=27015
+export ARK_SCRIPT_DIR=$SCRIPT_DIR/ArkScripts
+export GAME_PORT=7777
+export QUERY_PORT=27015
 
 export ARK_ADMIN_PASS=trains
 export RCON_HOST=127.0.0.1
 export RCON_PORT=27020
 
 export RCON_HOME=/usr/bin/rcon
+
+export MAX_MAPS_RUNNING=3
+
+export STEAM_LOCATION=/home/zach/.steam
+export STEAM_CMD_LOCATION=/home/zach
+export STEAM_MOD_DIR=$STEAM_LOCATION/steamapps/workshop/content
 
 export CATALINA_HOME=/usr/share/tomcat9
 export CATALINA_BASE=/var/lib/tomcat9

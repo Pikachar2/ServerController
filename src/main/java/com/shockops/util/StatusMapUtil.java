@@ -33,7 +33,7 @@ public class StatusMapUtil {
     public static void statusCheckAndUpdateSaved(String line, String... args) {
         // If matches script text
         if (StringUtils.contains(line, "Map Saved!")) {
-            StatusLock.setStatusEnum(StatusEnum.STARTED, StatusLock.getSessionName(), StatusLock.getMapName());
+            StatusLock.setStatusEnum(StatusEnum.STARTED, StatusLock.getSessionName(), StatusLock.getMapNames());
         }
     }
 

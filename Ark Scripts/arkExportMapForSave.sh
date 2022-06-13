@@ -2,6 +2,9 @@
 #arkExportMapForSave.sh
 #script for correctly and safely exporting Ark saved data while running
 
+#### DEPRECATED???? #####
+
+
 #if incorrect number of arguments passed
 if [ $# -ne 1 ]; then
 	echo "No arguments supplied"
