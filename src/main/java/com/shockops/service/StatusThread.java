@@ -30,10 +30,11 @@ public class StatusThread extends Thread {
             if ((data == null) || data.equals(null)) {
                 // server is offline
                 break;
-            } else if ((data.getPlayers().size() == 0) || (data.getInfo().getPlayers().length() == 0)) {
+            } else if (data.getPlayers() == 0) {
                 // if nobody is online
                 // turn off server
-                new ScriptRunner().stopServer(script);
+                System.out.println("is this even used????? StatusThread");
+                new ScriptRunner().stopServer(script, null);
                 // leave loop/join thread
                 break;
             }

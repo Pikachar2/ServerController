@@ -1,12 +1,20 @@
 #!/bin/bash
 # Original Source: https://github.com/Donavan/docker_steambase/blob/master/extract_mod.sh
+
+# Params
+# $1: mod_appId -- steam game id
+# $2: modId -- ID of the mod itself
+# $3: modDir -- Game mod directory
+
+
 mod_appid=$1
 #mod_branch=Linux
 mod_branch=Windows
 modid=$2
 
-modsrcdir="/home/zach/Steam/steamapps/workshop/content/$mod_appid/$modid"
-moddestdir="$3$modid"
+modsrcdir="$STEAM_MOD_DIR/$mod_appid/$modid"
+#modsrcdir="/home/zach/Steam/steamapps/workshop/content/$mod_appid/$modid"
+moddestdir="$3/$modid"
 #moddestdir="/opt/steam/mods/$modid"
 modbranch="${mod_branch:-Windows}"
 

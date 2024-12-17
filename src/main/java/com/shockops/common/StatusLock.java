@@ -1,7 +1,12 @@
 package com.shockops.common;
 
+import java.util.Set;
+
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.shockops.beans.PortContainer;
+import com.shockops.collections.PortMap;
+import com.shockops.collections.PortMapManager;
 import com.shockops.enums.StatusEnum;
 
 public class StatusLock {
@@ -10,18 +15,37 @@ public class StatusLock {
     private static String statusMsg = statusEnum.assembleMessage();
 
     private static String sessionName = null;
-    private static String mapName = null;
+    // private static List<String> mapNames = new ArrayList<>();
+    private static PortMap portMap = new PortMap();
 
     public static void setStatusEnum(StatusEnum newStatus, String... args) {
         statusEnum = newStatus;
         statusMsg = statusEnum.assembleMessage((Object[]) args);
-        if (ArrayUtils.isEmpty(args)) {
-            sessionName = null;
-            mapName = null;
-        } else {
-            sessionName = args[0];
-            mapName = args[1];
+
+        switch (newStatus) {
+            case SPINNING_UP:
+            case STARTING_SCRIPT:
+            case CREATING:
+                sessionName = args[0];
+                PortContainer ports = PortMapManager.getAvailablePorts(portMap);
+                portMap.put(args[1], ports.getGamePort(), ports.getQueryPort(), ports.getRconPort());
+                break;
+            case STOPPING:
+                portMap.remove(args[0]);
+                if (portMap.size() == 0) {
+                    sessionName = null;
+                    portMap.clear();
+                }
+            default:
+                break;
         }
+    }
+
+    public static void setStatusEnum(StatusEnum newStatus, String arg, Set<String> args) {
+        String[] argAr = args.toArray(new String[args.size()]);
+        String[] argArray = {arg};
+        argArray = ArrayUtils.addAll(argArray, argAr);
+        setStatusEnum(newStatus, argArray);
     }
 
     public static StatusEnum getStatusEnum() {
@@ -32,8 +56,8 @@ public class StatusLock {
         return sessionName;
     }
 
-    public static String getMapName() {
-        return mapName;
+    public static Set<String> getMapNames() {
+        return portMap.getMapNames();
     }
 
     public static Boolean isOffline() {
@@ -50,6 +74,10 @@ public class StatusLock {
 
     public static Boolean isRunning() {
         return statusEnum.isRunning();
+    }
+
+    public static PortContainer getPortsByMapName(String mapName) {
+        return portMap.getPortsByMap(mapName);
     }
 
 }

@@ -5,7 +5,7 @@
 
 #if server NOT started, update server
 if  !(pgrep -x "ShooterGameServ"); then
-	~/steamcmd/steamcmd.sh +login anonymous +force_install_dir "/home/zach/Servers/Ark_Server" +app_update 376030 validate +quit;
+	$STEAM_CMD_LOCATION/steamcmd +login anonymous +force_install_dir "$ARK_SERVER_DIR" +app_update 376030 validate +quit;
 	echo -e "\e[42m Application Update is finished! \e[0m"
 	echo -e "\e[42m Updating mods... \e[0m"
 	./arkUpdateMods.sh

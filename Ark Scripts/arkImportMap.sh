@@ -2,6 +2,7 @@
 #arkImportMap.sh
 #script for correctly and safely importing Ark saved data 
 
+echo -e "Running arkImportMap.sh"
 #if incorrect number of arguments passed
 if [ $# -ne 1 ]; then
 	echo "No arguments supplied"
@@ -19,8 +20,8 @@ if  (pgrep -x "ShooterGameServ"); then
 	#else, inform that server is currently running
 	echo -e "\e[41m Server running, cant setup!! \e[0m"
 else
-
-	baseDir="/home/zach/Servers/Ark_Server/ShooterGame"
+	echo "Server currently not running."
+	baseDir="$ARK_SERVER_DIR/ShooterGame"
 	saveDir="$baseDir/SavedMaps/$1"
 	if [ ! -d "$saveDir" ]; then
 		#directory does not exist
@@ -32,15 +33,21 @@ else
 	cd "$baseDir"
 
 	#remove old data
-	if [ ! -d "$baseDir/Saved" ]; then
-		rm Saved
+	if ! [ ! -L "$baseDir/Saved" ]; then
+		echo "Should have deleted."
+		unlink "$baseDir/Saved"
+#		rm Saved
+	else
+		echo "Directory $baseDir/Saved DOES NOT exist!"
 	fi
-	if [ ! -d "$baseDir/Content/Mods" ]; then
-		rm Content/Mods
-	fi
+#	if [ ! -d "$baseDir/Content/Mods" ]; then
+#		rm Content/Mods
+#	else
+#		echo "Directory $baseDir/Content/Mods DOES NOT exist!"
+#	fi
 
 	#load maps
-	ln -s "$saveDir"/Mods "Content/Mods"
+#	ln -s "$saveDir"/Mods "Content/Mods"
 	ln -s "$saveDir"/Saved "Saved"
 
 	echo -e "\e[42m Map loaded! \e[0m"

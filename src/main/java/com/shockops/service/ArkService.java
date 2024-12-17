@@ -41,8 +41,8 @@ public class ArkService {
     @Autowired
     protected ScriptInfo scriptInfo;
 
-    @Autowired
-    private IPAddressService ipAddressService;
+    // @Autowired
+    // private IPAddressService ipAddressService;
 
     @Autowired
     private CommandLineService commandLineService;
@@ -60,12 +60,9 @@ public class ArkService {
         // TODO Link for help on getting server info
         // https://ark-servers.net/help/api/
 
-        // Acquire current IPAddress
-        ipAddressService.getMyIp();
-
         ArkData data = dataTrawler.exchangeAndConvert();
         Boolean isFullyOnline;
-        if ((data == null) || data.equals(null)) {
+        if ((data == null) || data.equals(null) || !data.isOnline()) {
             isFullyOnline = false;
         } else {
             isFullyOnline = true;
@@ -74,7 +71,8 @@ public class ArkService {
         // return new ArkStatusResponse("Offline");
 
         // return new ArkStatusResponse("Online");
-        return new ArkStatusResponse(correlateStatus(isFullyOnline));
+        return new ArkStatusResponse(correlateStatus(isFullyOnline), StatusLock.getSessionName(),
+                        StatusLock.getMapNames());
     }
 
     private String correlateStatus(Boolean isFullyOnline) {
@@ -87,7 +85,7 @@ public class ArkService {
                 if (!isFullyOnline) {
                     return StatusLock.getStatusMsg();
                 }
-                StatusLock.setStatusEnum(StatusEnum.STARTED, StatusLock.getSessionName(), StatusLock.getMapName());
+                StatusLock.setStatusEnum(StatusEnum.STARTED, StatusLock.getSessionName(), StatusLock.getMapNames());
                 break;
             case CREATED:
             case STARTED:
@@ -97,6 +95,7 @@ public class ArkService {
                 break;
             case OFFLINE:
                 if (isFullyOnline) {
+                    // TODO: Fix the unknown bit
                     StatusLock.setStatusEnum(StatusEnum.STARTED, "UNKNOWN", "UNKNOWN");
                 }
                 break;
@@ -113,16 +112,16 @@ public class ArkService {
         return retval;
     }
 
-    public TransferInfo stopArkServer() {
+    public TransferInfo stopArkServer(String mapName) {
         ArkScript script = new ArkScript();
-        TransferInfo retval = new TransferInfo(scriptRunner.stopServer(script));
+        TransferInfo retval = new TransferInfo(scriptRunner.stopServer(script, mapName));
 
         return retval;
     }
 
-    public TransferInfo saveAndExportArkServer() {
+    public TransferInfo saveAndExportArkServer(String mapName) {
         ArkScript script = new ArkScript();
-        TransferInfo retval = new TransferInfo(scriptRunner.saveAndExportServer(script));
+        TransferInfo retval = new TransferInfo(scriptRunner.saveAndExportServer(script, mapName));
 
         return retval;
     }
@@ -231,9 +230,9 @@ public class ArkService {
         return maps;
     }
 
-    public TransferInfo kickPlayer(String playerId) {
+    public TransferInfo kickPlayer(String playerId, String mapName) {
         ArkScript script = new ArkScript();
-        TransferInfo retval = new TransferInfo(scriptRunner.kickPlayer(script, playerId));
+        TransferInfo retval = new TransferInfo(scriptRunner.kickPlayer(script, playerId, mapName));
         return retval;
     }
 }
