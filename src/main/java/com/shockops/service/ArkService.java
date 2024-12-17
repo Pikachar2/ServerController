@@ -60,9 +60,6 @@ public class ArkService {
         // TODO Link for help on getting server info
         // https://ark-servers.net/help/api/
 
-        // Acquire current IPAddress
-        // ipAddressService.getMyIp();
-
         ArkData data = dataTrawler.exchangeAndConvert();
         Boolean isFullyOnline;
         if ((data == null) || data.equals(null) || !data.isOnline()) {
