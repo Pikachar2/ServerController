@@ -16,6 +16,7 @@ import com.shockops.beans.ArkData;
 import com.shockops.beans.BaseScript;
 import com.shockops.beans.PortContainer;
 import com.shockops.beans.ScriptInfo;
+import com.shockops.beans.ScriptOutput;
 import com.shockops.common.ConstVars;
 import com.shockops.common.StatusLock;
 import com.shockops.config.EnvironmentProperties;
@@ -42,11 +43,11 @@ public class ScriptRunner extends Thread {
 
         StatusLock.setStatusEnum(StatusEnum.STARTING_SCRIPT, sessionName, mapName);
         PortContainer ports = StatusLock.getPortsByMapName(mapName);
-        String retval = runBasicScript(script.getStartScript(), ConstVars.STARTING, true, ConstVars.SERVER_RUNNING,
-                        StatusMapUtil::statusCheckAndUpdateStarted, sessionName, mapName, ports.getGamePort(),
-                        ports.getQueryPort(), ports.getRconPort());
+        ScriptOutput retval = runBasicScript(script.getStartScript(), ConstVars.STARTING, true,
+                        ConstVars.SERVER_RUNNING, StatusMapUtil::statusCheckAndUpdateStarted, sessionName, mapName,
+                        ports.getGamePort(), ports.getQueryPort(), ports.getRconPort());
 
-        return retval;
+        return retval.getStatusMessage();
     }
 
     public String createMapAndStartServer(BaseScript script, String sessionName, String mapName) {
@@ -57,10 +58,10 @@ public class ScriptRunner extends Thread {
         }
 
         StatusLock.setStatusEnum(StatusEnum.CREATING, sessionName, mapName);
-        String retval = runBasicScript(script.getCreateScript(), ConstVars.STARTING, true, ConstVars.SERVER_RUNNING,
-                        StatusMapUtil::statusCheckAndUpdateCreated, sessionName);
+        ScriptOutput retval = runBasicScript(script.getCreateScript(), ConstVars.STARTING, true,
+                        ConstVars.SERVER_RUNNING, StatusMapUtil::statusCheckAndUpdateCreated, sessionName);
 
-        return retval;
+        return retval.getStatusMessage();
     }
 
     public String stopServer(BaseScript script, String mapName) {
@@ -71,10 +72,10 @@ public class ScriptRunner extends Thread {
         PortContainer ports = StatusLock.getPortsByMapName(mapName);
         StatusLock.setStatusEnum(StatusEnum.STOPPING, mapName);
         // TODO check if people are in the game
-        String retval = runBasicScript(script.getStopScript(), ConstVars.STOPPED, false, ConstVars.EMPTY,
+        ScriptOutput retval = runBasicScript(script.getStopScript(), ConstVars.STOPPED, false, ConstVars.EMPTY,
                         StatusMapUtil::statusCheckAndUpdateStopped, ports.getRconPort());
 
-        return retval;
+        return retval.getStatusMessage();
     }
 
     public String saveAndExportServer(BaseScript script, String mapName) {
@@ -85,10 +86,10 @@ public class ScriptRunner extends Thread {
 
         StatusLock.setStatusEnum(StatusEnum.SAVING, StatusLock.getSessionName(), mapName);
         PortContainer ports = StatusLock.getPortsByMapName(mapName);
-        String retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVER_RUNNING,
+        ScriptOutput retval = runBasicScript(script.getSaveScript(), ConstVars.SAVED, true, ConstVars.SERVER_RUNNING,
                         StatusMapUtil::statusCheckAndUpdateSaved, ports.getRconPort());
 
-        return retval;
+        return retval.getStatusMessage();
     }
 
     public String updateServer(BaseScript script) {
@@ -99,10 +100,10 @@ public class ScriptRunner extends Thread {
         }
 
         StatusLock.setStatusEnum(StatusEnum.UPDATING);
-        String retval = runBasicScript(script.getUpdateScript(), ConstVars.UPDATED, true, ConstVars.SERVER_UPDATING,
-                        StatusMapUtil::statusCheckAndUpdateUpdatedServer);
+        ScriptOutput retval = runBasicScript(script.getUpdateScript(), ConstVars.UPDATED, true,
+                        ConstVars.SERVER_UPDATING, StatusMapUtil::statusCheckAndUpdateUpdatedServer);
 
-        return retval;
+        return retval.getStatusMessage();
     }
 
     public String kickPlayer(BaseScript script, String playerId, String mapName) {
@@ -111,17 +112,33 @@ public class ScriptRunner extends Thread {
         }
 
         PortContainer ports = StatusLock.getPortsByMapName(mapName);
-        String retval = runBasicScript(script.getKickScript(), ConstVars.KICKED, true, ConstVars.SERVER_RUNNING,
+        ScriptOutput retval = runBasicScript(script.getKickScript(), ConstVars.KICKED, true, ConstVars.SERVER_RUNNING,
                         StatusMapUtil::statusCheckAndUpdateKicked, playerId, ports.getRconPort());
-        return retval;
+        return retval.getStatusMessage();
     }
 
+    // public String arkStatus(BaseScript script, String mapName) {
+    // if (!StatusLock.isRunning()) {
+    // return StatusLock.getStatusMsg();
+    // }
+    //
+    // PortContainer ports = StatusLock.getPortsByMapName(mapName);
+    // StatusLock.setStatusEnum(StatusEnum.STOPPING, mapName);
+    // // TODO check if people are in the game
+    // ScriptOutput retval = runBasicScript(script.getStatusScript(), ConstVars.STOPPED, false,
+    // ConstVars.EMPTY,
+    // StatusMapUtil::statusCheckAndUpdateStopped, ports.getRconPort());
+    //
+    // return retval.getStatusMessage();
+    // }
+
     @SuppressWarnings("resource")
-    public String runBasicScript(String scriptFunction, String successString, Boolean isRunning, String status,
+    public ScriptOutput runBasicScript(String scriptFunction, String successString, Boolean isRunning, String status,
                     MultiArgFunction<String> statusMethod, String... args) {
         // NOTE: READ OUTPUT ASYNC
         // https://stackoverflow.com/questions/30725175/java-read-process-output-when-its-finished
-        String retval = successString;
+        ScriptOutput retval = new ScriptOutput();
+        retval.setStatusMessage(successString);
         List<String> processBuilderArgsList = new ArrayList<>();
         processBuilderArgsList.add(scriptFunction);
         processBuilderArgsList.addAll(Arrays.asList(args));
@@ -153,12 +170,14 @@ public class ScriptRunner extends Thread {
                 }
             }).start();
 
+            int exitCode = core.waitFor();
+            retval.setExitCode(exitCode);
             scriptInfo.setArkServer(core);
             setStatus(isRunning, status);
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             System.out.println("something broke");
             e.printStackTrace();
-            retval = ConstVars.FAIL;
+            retval.setStatusMessage(ConstVars.FAIL);
         }
 
         System.out.println("just before returning...");
