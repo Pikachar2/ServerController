@@ -8,6 +8,7 @@ public class EnvironmentProperties {
     // URLs
     public static String ARKSERVERS_API_QUERY_URL;
     public static String THIS_SERVER_PORT;
+    public static String ARKSERVERS_API_KEY;
 
     // public static String SCRIPTDIR = "C:\\Users\\highi\\Desktop";
     public static String SCRIPTDIR;
@@ -25,10 +26,11 @@ public class EnvironmentProperties {
     // public static final String ARKKICKSCRIPT = ARKSCRIPTDIR + "/arkKickPlayer.bat";
     public static String ARK_MAP_FILE;
 
-    public static void initEnvVars(String arkServersApiQueryUrl, String thisServerPort, String scriptDir,
-                    String workDir, String arkSavedMapsDir) {
+    public static void initEnvVars(String arkServersApiQueryUrl, String thisServerPort, String arkServersApiKey,
+                    String scriptDir, String workDir, String arkSavedMapsDir) {
         ARKSERVERS_API_QUERY_URL = arkServersApiQueryUrl;
         THIS_SERVER_PORT = thisServerPort;
+        ARKSERVERS_API_KEY = arkServersApiKey;
 
         SCRIPTDIR = scriptDir;
         WORKDIR = workDir;

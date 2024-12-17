@@ -1,6 +1,7 @@
 export ARK_SAVED_MAPS_DIR=/home/zach/Servers/Ark_Server/ShooterGame/SavedMaps
 export ARK_WORK_DIR=/home/zach/Scripts/ArkScripts
-export ARKSERVERS_API_QUERY_URL=https://arkservers.net/api/query/
+export ARKSERVERS_API_QUERY_URL=https://ark-servers.net/api/?object=servers&element=detail&key=
+export ARKSERVERS_API_KEY=
 export IP_CHECK_ADDRESS=http://checkip.amazonaws.com/
 export SCRIPT_DIR=/home/zach/Scripts
 export THIS_SERVER_PORT=27015
