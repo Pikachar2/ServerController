@@ -41,8 +41,8 @@ public class ArkService {
     @Autowired
     protected ScriptInfo scriptInfo;
 
-    @Autowired
-    private IPAddressService ipAddressService;
+    // @Autowired
+    // private IPAddressService ipAddressService;
 
     @Autowired
     private CommandLineService commandLineService;
@@ -61,11 +61,11 @@ public class ArkService {
         // https://ark-servers.net/help/api/
 
         // Acquire current IPAddress
-        ipAddressService.getMyIp();
+        // ipAddressService.getMyIp();
 
         ArkData data = dataTrawler.exchangeAndConvert();
         Boolean isFullyOnline;
-        if ((data == null) || data.equals(null)) {
+        if ((data == null) || data.equals(null) || !data.isOnline()) {
             isFullyOnline = false;
         } else {
             isFullyOnline = true;

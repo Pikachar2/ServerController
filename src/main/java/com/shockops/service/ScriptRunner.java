@@ -189,7 +189,7 @@ public class ScriptRunner extends Thread {
             if ((data == null) || data.equals(null)) {
                 // server is offline
                 break;
-            } else if ((data.getPlayers().size() == 0) || (data.getInfo().getPlayers().length() == 0)) {
+            } else if (data.getPlayers() == 0) {
                 // if nobody is online
                 // turn off server
                 System.out.println("is this even used????? ScriptRunner");

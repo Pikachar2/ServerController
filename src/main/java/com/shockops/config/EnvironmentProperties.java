@@ -14,6 +14,7 @@ public class EnvironmentProperties {
     public static String GAME_PORT;
     public static String QUERY_PORT;
     public static String RCON_PORT;
+    public static String ARKSERVERS_API_KEY;
 
     // public static String SCRIPTDIR = "C:\\Users\\highi\\Desktop";
     public static String SCRIPT_DIR;
@@ -34,11 +35,13 @@ public class EnvironmentProperties {
     public static Integer MAX_MAPS_RUNNING;
 
     public static void initEnvVars(String arkServersApiQueryUrl, String gamePort, String queryPort, String rconPort,
-                    String scriptDir, String workDir, String arkSavedMapsDir, Integer maxMapsRunning) {
+                    String arkServersApiKey, String scriptDir, String workDir, String arkSavedMapsDir,
+                    Integer maxMapsRunning) {
         ARKSERVERS_API_QUERY_URL = arkServersApiQueryUrl;
         QUERY_PORT = queryPort;
         GAME_PORT = gamePort;
         RCON_PORT = rconPort;
+        ARKSERVERS_API_QUERY_URL = arkServersApiQueryUrl;
 
         SCRIPT_DIR = scriptDir;
         WORK_DIR = workDir;

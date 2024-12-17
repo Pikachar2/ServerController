@@ -1,6 +1,5 @@
 package com.shockops.service;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
@@ -15,17 +14,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.shockops.beans.ArkData;
-import com.shockops.config.EnvironmentProperties;
+import com.shockops.config.PropertyConfiguration;
+import com.shockops.deserializer.CustomBooleanDeserializer;
 
 @Service
 @DependsOn({"initEnvVars"})
 public class DataTrawler {
     @Autowired
-    EnvironmentProperties propertyConfiguration;
+    PropertyConfiguration propertyConfiguration;
 
     private ArkData data;
     private static String url;
@@ -36,15 +36,13 @@ public class DataTrawler {
     public DataTrawler() {
         super();
         this.data = new ArkData();
-        url = EnvironmentProperties.ARKSERVERS_API_QUERY_URL;
-        System.out.println("Trawler-URL: " + url);
         this.restTemplate = new RestTemplate();
         initEntity();
     }
 
     @PostConstruct
     public void setup() {
-        url = EnvironmentProperties.ARKSERVERS_API_QUERY_URL;
+        url = propertyConfiguration.getArkServersApiQueryUrl();
         System.out.println("Trawler-URL POSTCONSTRUCT: " + url);
     }
 
@@ -69,11 +67,13 @@ public class DataTrawler {
     }
 
     private String executeExchange() {
-        String completeUrl = url + IPAddressService.MY_IP;
-        // System.out.println("Trawler-URL executeExchange: " + url);
+        String completeUrl = url + propertyConfiguration.getArkServerApiKey();
+        // System.out.println("Trawler-URL executeExchange: " + completeUrl);
 
         ResponseEntity<String> res = restTemplate.exchange(completeUrl, HttpMethod.GET, entity, String.class);
+        // System.out.println("Trawler-URL executeExchange -- call completed.");
         String responseBody = res.getBody().toString();
+        // System.out.println("Trawler-URL executeExchange -- responseBody -> String.");
         return responseBody;
     }
 
@@ -86,20 +86,18 @@ public class DataTrawler {
         ArkData newData = null;
         // Use JSONMapper
         ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(boolean.class, new CustomBooleanDeserializer());
+        mapper.registerModule(module);
         try {
             newData = mapper.readValue(json, ArkData.class);
-        } catch (JsonParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (JsonProcessingException ex) {
+            System.out.println("Trawler-URL convertJsonToData -- Failed to map to JSON.");
+            ex.printStackTrace();
         }
 
         this.data = newData;
+        // System.out.println("Trawler-URL convertJsonToData -- converted to JSON.");
         return newData;
     }
 
