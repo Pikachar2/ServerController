@@ -17,8 +17,6 @@ public class PropertyConfiguration implements InitializingBean {
     private String queryPort;
     @Value("${ark.rcon.port}")
     private String rconPort;
-    // @Value("${ark.server_port:27015}")
-    // private String thisServerPort;
     @Value("${ark.arkservers_api_key}")
     private String arkServerApiKey;
 
